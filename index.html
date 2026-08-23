@@ -1,0 +1,3356 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>THE DARK JOURNEY</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+Thai:wght@300;400;500;600;700&family=Itim&display=swap" rel="stylesheet">
+
+<style>
+
+@font-face {
+    font-family: 'PS';
+    src: url('PS.ttf') format('truetype');
+}
+
+/* =========================================================
+    BASIC
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:#030303;
+    color:#eee0c4;
+    font-family:"Noto Serif Thai",serif;
+}
+
+body{
+    overflow:hidden;
+}
+
+button,
+input,
+textarea{
+    font-family:"Noto Serif Thai",serif;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
+.app{
+    position:relative;
+    width:100%;
+    height:100vh;
+    max-width:700px;
+    margin:auto;
+    overflow:hidden;
+    background:#080706;
+}
+
+/* =========================================================
+    PAGE
+========================================================= */
+
+.page{
+    position:absolute;
+    inset:0;
+    display:none;
+    overflow:hidden;
+}
+
+.page.active{
+    display:flex;
+    animation:pageIn .65s cubic-bezier(.22,.61,.36,1);
+}
+
+.page.leave{
+    animation:pageOut .35s ease forwards;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(22px) scale(.985);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+@keyframes pageOut{
+    from{
+        opacity:1;
+        transform:translateY(0);
+    }
+    to{
+        opacity:0;
+        transform:translateY(-15px);
+    }
+}
+
+/* =========================================================
+    FOG
+========================================================= */
+
+.fog-wrapper{
+    position:fixed;
+    inset:0;
+    z-index:999;
+    pointer-events:none;
+    overflow:hidden;
+    opacity:.42;
+}
+
+.fog{
+    position:absolute;
+    width:170%;
+    height:70%;
+    left:-35%;
+    border-radius:50%;
+    filter:blur(55px);
+    opacity:.22;
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(232,215,181,.45) 0%,
+            rgba(180,160,130,.18) 35%,
+            transparent 72%
+        );
+}
+
+.fog.one{
+    top:10%;
+    animation:fog1 24s ease-in-out infinite alternate;
+}
+
+.fog.two{
+    top:45%;
+    animation:fog2 31s ease-in-out infinite alternate;
+}
+
+.fog.three{
+    top:70%;
+    opacity:.15;
+    animation:fog3 38s ease-in-out infinite alternate;
+}
+
+@keyframes fog1{
+    0%{
+        transform:translate(-10%,0) rotate(-3deg) scale(1);
+    }
+    100%{
+        transform:translate(20%,8%) rotate(5deg) scale(1.15);
+    }
+}
+
+@keyframes fog2{
+    0%{
+        transform:translate(15%,0) scale(1.05);
+    }
+    100%{
+        transform:translate(-20%,-10%) scale(1.2);
+    }
+}
+
+@keyframes fog3{
+    0%{
+        transform:translate(-15%,5%);
+    }
+    100%{
+        transform:translate(15%,-5%);
+    }
+}
+
+/* =========================================================
+    GRAIN
+========================================================= */
+
+.grain{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:900;
+    opacity:.09;
+
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+    SOUND BUTTON
+========================================================= */
+
+.sound-button{
+    position:fixed;
+    top:18px;
+    right:18px;
+    z-index:5000;
+
+    width:44px;
+    height:44px;
+
+    border-radius:50%;
+    border:1px solid rgba(216,187,134,.55);
+
+    background:rgba(10,8,6,.75);
+    color:#eee0c4;
+
+    cursor:pointer;
+
+    backdrop-filter:blur(8px);
+
+    transition:.25s;
+}
+
+.sound-button:hover{
+    transform:scale(1.08);
+    border-color:#e7c98c;
+}
+
+.sound-button:active{
+    transform:scale(.88);
+}
+
+/* =========================================================
+    COVER
+========================================================= */
+
+#cover{
+    align-items:center;
+    justify-content:space-between;
+    flex-direction:column;
+    padding:55px 25px 38px;
+}
+
+.cover-video{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:
+        brightness(.42)
+        contrast(1.15)
+        saturate(.65);
+
+    z-index:0;
+}
+
+.cover-overlay{
+    position:absolute;
+    inset:0;
+    z-index:1;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.92) 0%,
+            rgba(0,0,0,.18) 35%,
+            rgba(0,0,0,.32) 55%,
+            rgba(0,0,0,.96) 100%
+        );
+}
+
+.cover-header{
+    position:relative;
+    z-index:20;
+
+    text-align:center;
+
+    margin-top:30px;
+}
+
+.subtitle{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:13px;
+    letter-spacing:7px;
+
+    color:#d8bb86;
+
+    margin-bottom:10px;
+}
+
+.title{
+    margin:0;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:57px;
+    line-height:.95;
+
+    letter-spacing:4px;
+
+    color:#eee0c4;
+
+    text-shadow:
+        0 5px 30px #000,
+        0 0 20px rgba(216,187,134,.15);
+}
+
+.cover-thai{
+    margin-top:18px;
+
+    font-family:"Itim",cursive;
+
+    color:#cbb58d;
+
+    font-size:14px;
+
+    letter-spacing:2px;
+}
+
+.cover-footer{
+    position:relative;
+    z-index:20;
+
+    width:100%;
+    max-width:360px;
+
+    text-align:center;
+}
+
+.start-button,
+.primary-button{
+
+    width:100%;
+
+    padding:15px 24px;
+
+    border-radius:40px;
+
+    border:1px solid rgba(216,187,134,.7);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(70,52,31,.96),
+            rgba(20,14,9,.96)
+        );
+
+    color:#eee0c4;
+
+    font-size:15px;
+
+    letter-spacing:2px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.45);
+
+    transition:
+        transform .18s,
+        box-shadow .18s,
+        background .18s;
+}
+
+.start-button:hover,
+.primary-button:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.65);
+}
+
+.start-button:active,
+.primary-button:active,
+.answer:active,
+.nav-button:active{
+    transform:scale(.95);
+
+    box-shadow:
+        0 0 0 4px rgba(216,187,134,.12);
+}
+
+.scroll-arrow{
+    margin-top:18px;
+
+    font-size:25px;
+
+    color:#d8bb86;
+
+    animation:arrow 1.7s infinite;
+}
+
+@keyframes arrow{
+    50%{
+        transform:translateY(8px);
+        opacity:.4;
+    }
+}
+
+/* =========================================================
+    INTRO
+========================================================= */
+
+#intro{
+    align-items:center;
+    justify-content:center;
+}
+
+.intro-bg{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:
+        brightness(.4)
+        contrast(1.1)
+        saturate(.65);
+}
+
+.intro-overlay{
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,0,0,.15),
+            rgba(0,0,0,.82)
+        );
+}
+
+.intro-content{
+    position:relative;
+    z-index:20;
+
+    width:90%;
+    max-width:540px;
+
+    padding:32px 28px;
+
+    background:rgba(5,4,3,.78);
+
+    border:
+        1px solid rgba(216,187,134,.25);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.7);
+
+    backdrop-filter:blur(8px);
+
+    text-align:center;
+}
+
+.label{
+    font-family:"Cormorant Garamond",serif;
+
+    color:#d8bb86;
+
+    font-size:12px;
+
+    letter-spacing:5px;
+}
+
+.content-title{
+    margin:8px 0 0;
+
+    font-size:29px;
+}
+
+.gold-line{
+    width:65px;
+    height:1px;
+
+    margin:18px auto;
+
+    background:#d8bb86;
+}
+
+.description{
+    color:#e8dcc7;
+
+    font-size:14px;
+
+    line-height:2;
+}
+
+.warning{
+    margin:20px auto;
+
+    padding:12px;
+
+    border:
+        1px solid rgba(216,187,134,.3);
+
+    background:
+        rgba(216,187,134,.05);
+
+    color:#d8bb86;
+
+    font-size:12px;
+}
+
+/* =========================================================
+    POPUP (APPLYING PS.ttf)
+========================================================= */
+
+.popup-layer{
+    position:fixed;
+    inset:0;
+
+    z-index:8000;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.78);
+
+    backdrop-filter:blur(7px);
+}
+
+.popup-layer.active{
+    display:flex;
+
+    animation:popupFade .35s ease;
+}
+
+@keyframes popupFade{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+.info-paper,
+.dark-paper{
+    font-family: 'PS', "Noto Serif Thai", serif !important;
+}
+
+.info-paper{
+    position:relative;
+
+    width:100%;
+    max-width:550px;
+
+    max-height:88vh;
+
+    overflow-y:auto;
+
+    padding:35px 28px 28px;
+
+    color:#3e2d1e;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eee0c2,
+            #dfcba5
+        );
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.85);
+
+    transform:rotate(-.4deg);
+
+    animation:paperOpen .65s cubic-bezier(.22,.61,.36,1);
+}
+
+@keyframes paperOpen{
+
+    0%{
+        opacity:0;
+        transform:
+            translateY(80px)
+            rotate(-4deg)
+            scale(.75);
+    }
+
+    60%{
+        transform:
+            translateY(-8px)
+            rotate(.8deg)
+            scale(1.02);
+    }
+
+    100%{
+        opacity:1;
+        transform:
+            translateY(0)
+            rotate(-.4deg)
+            scale(1);
+    }
+}
+
+.info-paper::before{
+    content:"";
+
+    position:absolute;
+
+    inset:12px;
+
+    border:
+        1px solid rgba(80,55,30,.18);
+
+    pointer-events:none;
+}
+
+.paper-label{
+    text-align:center;
+
+    font-family:'PS', "Cormorant Garamond", serif;
+
+    color:#735333;
+
+    letter-spacing:4px;
+
+    font-size:12px;
+}
+
+.paper-title{
+    margin:10px 0 12px;
+
+    text-align:center;
+
+    font-size:20px;
+
+    color:#392719;
+
+    line-height:1.5;
+}
+
+.paper-text{
+    font-size:13.5px;
+
+    line-height:1.9;
+
+    color:#493725;
+}
+
+.paper-signature{
+    margin-top:18px;
+
+    text-align:right;
+
+    color:#725437;
+
+    font-family:'PS', "Itim", cursive;
+
+    font-size:13.5px;
+
+    line-height:1.7;
+}
+
+.paper-button{
+    display:block;
+
+    margin:22px auto 0;
+
+    padding:11px 25px;
+
+    border:
+        1px solid #795934;
+
+    background:#44301d;
+
+    color:#f3e4c6;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    transition:.2s;
+    font-family: 'PS', "Noto Serif Thai", serif;
+}
+
+.paper-button:hover{
+    transform:translateY(-2px);
+}
+
+.paper-button:active{
+    transform:scale(.94);
+}
+
+/* =========================================================
+    SURVEY
+========================================================= */
+
+#survey{
+    align-items:center;
+    justify-content:center;
+}
+
+.survey-bg{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:
+        brightness(.28)
+        contrast(1.15)
+        saturate(.65);
+}
+
+.survey-overlay{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.65),
+            rgba(0,0,0,.78)
+        );
+}
+
+.survey-container{
+    position:relative;
+
+    z-index:30;
+
+    width:94%;
+    max-width:650px;
+
+    height:92vh;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+/* =========================================================
+    PROGRESS
+========================================================= */
+
+.survey-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:#d8bb86;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+    margin-bottom:7px;
+}
+
+.progress-wrapper{
+    position:relative;
+
+    width:100%;
+
+    margin-bottom:18px;
+}
+
+.progress{
+    width:100%;
+
+    height:6px;
+
+    border-radius:20px;
+
+    background:rgba(216,187,134,.14);
+
+    overflow:visible;
+
+    position:relative;
+}
+
+.progress-bar{
+    height:100%;
+
+    width:0%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #72552e,
+            #d8bb86
+        );
+
+    transition:
+        width .5s cubic-bezier(.22,.61,.36,1);
+}
+
+.walker{
+    position:absolute;
+
+    top:-23px;
+
+    left:0%;
+
+    width:48px;
+    height:48px;
+
+    object-fit:contain;
+
+    transform:translateX(-50%);
+
+    transition:
+        left .5s cubic-bezier(.22,.61,.36,1);
+
+    filter:
+        drop-shadow(0 3px 5px rgba(0,0,0,.7));
+}
+
+/* =========================================================
+    QUESTION CARD
+========================================================= */
+
+.question-card{
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:20px 17px 35px;
+
+    scrollbar-width:thin;
+
+    scrollbar-color:#80633d transparent;
+
+    scroll-behavior:smooth;
+}
+
+.question-card::-webkit-scrollbar{
+    width:5px;
+}
+
+.question-card::-webkit-scrollbar-thumb{
+    background:#80633d;
+
+    border-radius:10px;
+}
+
+.page-heading{
+    text-align:center;
+
+    margin-bottom:18px;
+}
+
+.section-label{
+    color:#d8bb86;
+
+    font-family:"Cormorant Garamond",serif;
+
+    letter-spacing:3px;
+
+    font-size:12px;
+
+    margin-bottom:5px;
+}
+
+.page-title{
+    margin:0;
+
+    font-size:21px;
+
+    line-height:1.5;
+}
+
+.question-item{
+    padding:16px;
+
+    margin-bottom:13px;
+
+    background:
+        rgba(7,6,5,.88);
+
+    border:
+        1px solid rgba(216,187,134,.2);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.35);
+
+    animation:itemIn .45s ease both;
+
+    scroll-margin-top:25px;
+}
+
+.question-item:nth-child(2){
+    animation-delay:.04s;
+}
+
+.question-item:nth-child(3){
+    animation-delay:.08s;
+}
+
+.question-item:nth-child(4){
+    animation-delay:.12s;
+}
+
+@keyframes itemIn{
+    from{
+        opacity:0;
+
+        transform:translateY(12px);
+    }
+
+    to{
+        opacity:1;
+
+        transform:translateY(0);
+    }
+}
+
+.question-number{
+    color:#a58b60;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    margin-bottom:5px;
+}
+
+.question-text{
+    margin:0 0 11px;
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    color:#eee0c4;
+}
+
+.answers{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+}
+
+.answer{
+    position:relative;
+
+    width:100%;
+
+    padding:10px 12px;
+
+    text-align:left;
+
+    border:
+        1px solid rgba(216,187,134,.18);
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:#cfc2a8;
+
+    cursor:pointer;
+
+    transition:.18s;
+
+    line-height:1.5;
+}
+
+.answer:hover{
+    border-color:#d8bb86;
+
+    background:
+        rgba(216,187,134,.08);
+
+    color:#fff0d0;
+}
+
+.answer.selected{
+    border-color:#d8bb86 !important;
+
+    background:
+        rgba(216,187,134,.15) !important;
+
+    color:#fff1d4 !important;
+
+    box-shadow:
+        inset 3px 0 #d8bb86;
+}
+
+.answer:active{
+    transform:scale(.97);
+}
+
+/* =========================================================
+    UNANSWERED WARNING
+========================================================= */
+
+.global-warning-banner{
+    display:none;
+    margin-bottom:15px;
+    padding:10px 14px;
+    background:rgba(185,107,85,.15);
+    border:1px solid #b96b55;
+    color:#e5a392;
+    font-size:13px;
+    text-align:center;
+    animation:warningPulse .65s ease;
+}
+
+.global-warning-banner.active{
+    display:block;
+}
+
+.question-item.incomplete,
+.rating-question.incomplete{
+
+    border-color:#b96b55 !important;
+
+    box-shadow:
+        0 0 0 1px rgba(185,107,85,.35),
+        0 0 25px rgba(185,107,85,.18),
+        0 12px 35px rgba(0,0,0,.4);
+
+    animation:warningPulse .65s ease;
+}
+
+@keyframes warningPulse{
+
+    0%{
+        transform:translateX(0);
+    }
+
+    20%{
+        transform:translateX(-5px);
+    }
+
+    40%{
+        transform:translateX(5px);
+    }
+
+    60%{
+        transform:translateX(-3px);
+    }
+
+    80%{
+        transform:translateX(3px);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+}
+
+.incomplete-message{
+
+    margin-top:10px;
+
+    padding:8px 10px;
+
+    border-left:2px solid #b96b55;
+
+    background:
+        rgba(185,107,85,.08);
+
+    color:#d89a82;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    animation:inputIn .25s ease;
+}
+
+/* =========================================================
+    OTHER INPUT
+========================================================= */
+
+.other-input{
+    width:100%;
+
+    margin-top:7px;
+
+    padding:10px 12px;
+
+    border:
+        1px solid rgba(216,187,134,.4);
+
+    background:#0b0907;
+
+    color:#eee0c4;
+
+    outline:none;
+
+    font-size:13px;
+
+    animation:inputIn .25s ease;
+}
+
+@keyframes inputIn{
+    from{
+        opacity:0;
+
+        transform:translateY(-5px);
+    }
+
+    to{
+        opacity:1;
+
+        transform:translateY(0);
+    }
+}
+
+.other-input:focus{
+    border-color:#d8bb86;
+
+    box-shadow:
+        0 0 0 3px rgba(216,187,134,.07);
+}
+
+/* =========================================================
+    5 POINT SCALE
+========================================================= */
+
+.rating-question{
+
+    margin-bottom:13px;
+
+    padding:14px;
+
+    background:
+        rgba(7,6,5,.9);
+
+    border:
+        1px solid rgba(216,187,134,.18);
+
+    scroll-margin-top:25px;
+}
+
+.rating-text{
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    margin-bottom:10px;
+}
+
+.rating-row{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap:5px;
+}
+
+.rating-choice{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:48px;
+
+    border:
+        1px solid rgba(216,187,134,.18);
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:#a99d87;
+
+    cursor:pointer;
+
+    transition:.18s;
+
+    font-size:10px;
+
+    text-align:center;
+}
+
+.rating-choice span:first-child{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:23px;
+
+    height:23px;
+
+    margin-bottom:4px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(216,187,134,.35);
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:12px;
+}
+
+.rating-choice.selected{
+
+    border-color:#d8bb86 !important;
+
+    background:
+        rgba(216,187,134,.15) !important;
+
+    color:#fff0d0 !important;
+}
+
+.rating-choice.selected span:first-child{
+
+    background:#d8bb86 !important;
+
+    color:#21170d !important;
+
+    border-color:#d8bb86 !important;
+}
+
+/* =========================================================
+    TEXTAREA
+========================================================= */
+
+.text-answer{
+
+    width:100%;
+
+    min-height:115px;
+
+    padding:12px;
+
+    resize:vertical;
+
+    background:#0b0907;
+
+    border:
+        1px solid rgba(216,187,134,.25);
+
+    color:#eee0c4;
+
+    outline:none;
+
+    line-height:1.8;
+
+    font-size:13px;
+}
+
+.text-answer:focus{
+
+    border-color:#d8bb86;
+}
+
+/* =========================================================
+    NAVIGATION
+========================================================= */
+
+.navigation{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:10px 0 0;
+}
+
+.nav-button{
+
+    padding:10px 17px;
+
+    border-radius:30px;
+
+    border:
+        1px solid rgba(216,187,134,.4);
+
+    background:#15100b;
+
+    color:#eee0c4;
+
+    cursor:pointer;
+
+    transition:.18s;
+}
+
+.nav-button:hover{
+
+    border-color:#d8bb86;
+}
+
+.nav-button:disabled{
+
+    opacity:.3;
+
+    cursor:not-allowed;
+}
+
+/* =========================================================
+    DARK TOURISM PAPER (APPLYING PS.ttf)
+========================================================= */
+
+.dark-paper{
+
+    position:relative;
+
+    width:100%;
+
+    max-width:510px;
+
+    max-height:85vh;
+
+    overflow-y:auto;
+
+    padding:34px 27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e9d8b8,
+            #d8c29b
+        );
+
+    color:#3c2b1b;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.85);
+
+    transform:rotate(-.5deg);
+
+    animation:paperOpen .65s ease;
+}
+
+.dark-paper h2{
+
+    text-align:center;
+
+    font-family:'PS', "Itim", cursive;
+
+    font-size:27px;
+
+    font-weight:400;
+
+    margin:10px 0 16px;
+}
+
+.dark-paper p{
+
+    font-size:13.5px;
+
+    line-height:1.9;
+
+    color:#493725;
+}
+
+.definition{
+
+    margin:18px 0;
+
+    padding:15px;
+
+    border-top:
+        1px solid rgba(70,45,20,.2);
+
+    border-bottom:
+        1px solid rgba(70,45,20,.2);
+
+    line-height:1.9;
+
+    font-size:13.5px;
+}
+
+/* =========================================================
+    MATCHING
+========================================================= */
+
+#matching,
+#result,
+#thankyou{
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle,
+            #291f12,
+            #050403 70%
+        );
+}
+
+.matching-content{
+
+    width:90%;
+
+    max-width:450px;
+
+    text-align:center;
+}
+
+.match-label{
+
+    color:#d8bb86;
+
+    font-family:"Cormorant Garamond",serif;
+
+    letter-spacing:5px;
+
+    font-size:12px;
+}
+
+.matching-content h2{
+
+    font-size:27px;
+
+    margin:12px 0;
+}
+
+.matching-text{
+
+    color:#aaa08d;
+
+    font-size:13px;
+
+    line-height:2;
+}
+
+.match-animation{
+
+    position:relative;
+
+    width:150px;
+
+    height:150px;
+
+    margin:30px auto;
+}
+
+.match-ring{
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    border:1px solid #d8bb86;
+
+    animation:spin 3s linear infinite;
+}
+
+.match-ring:nth-child(2){
+
+    inset:15px;
+
+    animation-direction:reverse;
+}
+
+.match-center{
+
+    position:absolute;
+
+    inset:35px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#1d160e;
+
+    font-size:35px;
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================================================
+    RESULT
+========================================================= */
+
+.result-content{
+
+    width:90%;
+
+    max-width:470px;
+
+    text-align:center;
+}
+
+.result-label{
+
+    color:#d8bb86;
+
+    font-family:"Cormorant Garamond",serif;
+
+    letter-spacing:5px;
+
+    font-size:12px;
+}
+
+.result-icon{
+
+    width:135px;
+
+    height:135px;
+
+    margin:25px auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle,
+            #59462c,
+            #100d08
+        );
+
+    border:1px solid #d8bb86;
+
+    font-size:55px;
+}
+
+.result-name{
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:34px;
+
+    margin:0;
+}
+
+.result-description{
+
+    margin:15px 0;
+
+    color:#cfc2a8;
+
+    font-size:14px;
+
+    line-height:2;
+}
+
+.result-score{
+
+    color:#9f927b;
+
+    font-size:12px;
+
+    margin-bottom:20px;
+}
+
+/* =========================================================
+    THANK YOU
+========================================================= */
+
+.thankyou-content{
+
+    max-width:450px;
+
+    padding:30px;
+
+    text-align:center;
+}
+
+.thankyou-symbol{
+
+    font-size:50px;
+
+    color:#d8bb86;
+}
+
+.thankyou-content h2{
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:38px;
+}
+
+.thankyou-content p{
+
+    color:#b9ad97;
+
+    line-height:2;
+
+    font-size:14px;
+}
+
+/* =========================================================
+    RESPONSIVE
+========================================================= */
+
+@media(max-width:500px){
+
+    .title{
+        font-size:43px;
+    }
+
+    .subtitle{
+        font-size:11px;
+        letter-spacing:5px;
+    }
+
+    .intro-content{
+        padding:25px 18px;
+    }
+
+    .survey-container{
+        width:96%;
+        height:94vh;
+    }
+
+    .question-card{
+        padding:12px 5px 30px;
+    }
+
+    .question-item{
+        padding:13px;
+    }
+
+    .question-text{
+        font-size:14px;
+    }
+
+    .answer{
+        padding:9px 10px;
+        font-size:13px;
+    }
+
+    .rating-text{
+        font-size:13px;
+    }
+
+    .rating-choice{
+        min-height:44px;
+        font-size:8px;
+    }
+
+    .rating-choice span:first-child{
+        width:21px;
+        height:21px;
+    }
+
+    .walker{
+        width:42px;
+        height:42px;
+        top:-20px;
+    }
+
+    .info-paper,
+    .dark-paper{
+        padding:28px 20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="fog-wrapper">
+    <div class="fog one"></div>
+    <div class="fog two"></div>
+    <div class="fog three"></div>
+</div>
+
+<div class="grain"></div>
+
+<audio id="ambientSound"
+       src="เพลงประกอบ.mp3"
+       loop
+       preload="auto">
+</audio>
+
+<audio id="clickSoundAudio"
+       src="คลิกปุ่ม.mp3"
+       preload="auto">
+</audio>
+
+<audio id="paperSound"
+       src="เปิดกระดาษ.mp3"
+       preload="auto">
+</audio>
+
+<button
+    type="button"
+    class="sound-button"
+    id="soundButton">
+    🔊
+</button>
+
+<!-- ======================================================
+    COVER
+====================================================== -->
+
+<section class="page active" id="cover">
+
+    <video
+        class="cover-video"
+        autoplay
+        muted
+        loop
+        playsinline>
+
+        <source src="ทหารเดิน.mp4" type="video/mp4">
+
+    </video>
+
+    <div class="cover-overlay"></div>
+
+    <div class="cover-header">
+
+        <div class="subtitle">
+            RESEARCH SURVEY
+        </div>
+
+        <h1 class="title">
+            THE DARK<br>
+            JOURNEY
+        </h1>
+
+        <div class="cover-thai">
+            อดีดทิ้งร่องรอยไว้เสมอ
+            <br>แต่สิ่งที่เราตามหา
+            <br>คืออะไรที่ทำให้คุณอยากเดินทางไปพบมัน
+        </div>
+
+    </div>
+
+    <div class="cover-footer">
+
+        <button
+            type="button"
+            class="start-button"
+            id="startButton">
+
+            เริ่มต้นการเดินทาง
+            <span>➜</span>
+
+        </button>
+
+        <div class="scroll-arrow">
+            ⌄
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+    INTRO
+====================================================== -->
+
+<section class="page" id="intro">
+
+    <img
+        src="ฉาก1.jpg"
+        class="intro-bg"
+        alt="">
+
+    <div class="intro-overlay"></div>
+
+    <div class="intro-content">
+
+        <div class="label">
+            BEFORE THE JOURNEY
+        </div>
+
+        <h2 class="content-title">
+            ก่อนออกเดินทาง
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <div class="description">
+
+            การศึกษาครั้งนี้มุ่งศึกษาพฤติกรรม
+            การรับรู้ ความคิดเห็น และปัจจัยที่เกี่ยวข้องกับ
+            ความสนใจในการท่องเที่ยวเชิงมืด
+            ในพื้นที่สงครามในประเทศไทย
+
+            <br><br>
+
+            โปรดตอบคำถามจากความคิดเห็น
+            ความรู้สึก และประสบการณ์ของท่านตามความเป็นจริง
+
+        </div>
+
+        <div class="warning">
+
+            ✦ ไม่มีคำตอบที่ถูกหรือผิด
+            <br>
+            ทุกคำตอบมีคุณค่าต่อการศึกษาครั้งนี้ ✦
+
+        </div>
+
+        <button
+            type="button"
+            class="primary-button"
+            id="openInfoButton">
+
+            อ่านคำชี้แจงการวิจัย ➜
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+    RESEARCH INFO POPUP
+====================================================== -->
+
+<div
+    class="popup-layer"
+    id="researchPopup">
+
+    <div class="info-paper">
+
+        <div class="paper-label">
+            RESEARCH INFORMATION
+        </div>
+
+        <h2 class="paper-title">
+            คำชี้แจงสำหรับผู้ตอบแบบสอบถาม
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <div class="paper-text">
+
+            แบบสอบถามฉบับนี้จัดทำขึ้นเพื่อเป็นเครื่องมือสำหรับเก็บรวบรวมข้อมูลประกอบการศึกษาวิจัย เรื่อง<br>
+            <strong>“ปัจจัยที่มีอิทธิพลต่อความตั้งใจเดินทางท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย”</strong><br>
+            <em>(Factors Influencing the Intention to Visit War-Zone Dark Tourism Sites in Thailand)</em>
+
+            <br><br>
+
+            การวิจัยมีวัตถุประสงค์เพื่อศึกษาพฤติกรรม การรับรู้ ความเข้าใจ แรงจูงใจ อิทธิพลของสื่อสังคมออนไลน์ ความอยากรู้อยากเห็น และความตั้งใจในการเดินทางของบุคคลทั่วไปที่มีความสนใจต่อแหล่งท่องเที่ยวที่เกี่ยวข้องกับสงคราม ความสูญเสีย และเหตุการณ์สำคัญทางประวัติศาสตร์
+
+            ข้อมูลที่ได้รับจะนำไปใช้เพื่อการศึกษาและวิเคราะห์ในภาพรวม โดยจะไม่นำเสนอข้อมูลในลักษณะที่สามารถระบุตัวตนของผู้ตอบแบบสอบถามได้ โปรดตอบคำถามตามความคิดเห็นและประสบการณ์ของท่านอย่างตรงไปตรงมา การตอบแบบสอบถามใช้เวลาเพียงไม่กี่นาที
+
+            <br><br>
+
+            <strong>ผู้ตอบแบบสอบถามต้องมีอายุ 18 ปีขึ้นไป</strong>
+
+        </div>
+
+        <div class="paper-signature">
+
+            <br>
+            กิติกร บุพศิริ · อลิสา จิรโพธิธาดา · พุฒิพงศ์ ศรีรักษ์ · พรนภัส ไทยประสงค์
+
+            <br><br>
+            สาขาสตาร์ทอัพการท่องเที่ยวและการบริการ คณะบริหารธุรกิจและเทคโนโลยีสารสนเทศ<br>
+            มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น พ.ศ. 2569
+
+        </div>
+
+        <button
+            type="button"
+            class="paper-button"
+            id="acceptResearchButton">
+
+            รับทราบและเข้าสู่แบบสอบถาม
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+    AGE CHECK POPUP
+====================================================== -->
+
+<div
+    class="popup-layer"
+    id="agePopup">
+
+    <div class="info-paper">
+
+        <div class="paper-label">
+            PARTICIPANT ELIGIBILITY
+        </div>
+
+        <h2 class="paper-title">
+            ข้อกำหนดสำหรับผู้ตอบแบบสอบถาม
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <div class="paper-text"
+             style="text-align:center;">
+
+            แบบสอบถามนี้กำหนดกลุ่มผู้ตอบแบบสอบถาม
+            <strong>
+                อายุ 18 ปีขึ้นไป
+            </strong>
+
+            <br><br>
+
+            กรุณายืนยันว่าท่านมีคุณสมบัติตามเกณฑ์
+            ก่อนเข้าสู่ขั้นตอนการตอบแบบสอบถาม
+
+        </div>
+
+        <div style="
+            display:flex;
+            gap:10px;
+            margin-top:22px;
+        ">
+
+            <button
+                type="button"
+                class="paper-button"
+                id="ageNoButton"
+                style="margin:0;flex:1;">
+
+                ไม่ใช่
+
+            </button>
+
+            <button
+                type="button"
+                class="paper-button"
+                id="ageYesButton"
+                style="margin:0;flex:1;">
+
+                ใช่ ฉันอายุ 18 ปีขึ้นไป
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+    SURVEY
+====================================================== -->
+
+<section class="page" id="survey">
+
+    <img
+        src="ฉาก2.jpg"
+        class="survey-bg"
+        alt="">
+
+    <div class="survey-overlay"></div>
+
+    <div class="survey-container">
+
+        <div class="survey-top">
+
+            <span id="sectionLabelTop">
+                ส่วนที่ 1
+            </span>
+
+            <span>
+
+                หน้า
+                <span id="pageNumber">
+                    1
+                </span>
+                /
+                <span id="totalPageNumber">
+                    9
+                </span>
+
+                ·
+
+                <span id="percentText">
+                    11%
+                </span>
+
+            </span>
+
+        </div>
+
+        <div class="progress-wrapper">
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar">
+                </div>
+
+            </div>
+
+            <img
+                src="คนเดิน.gif"
+                class="walker"
+                id="walker"
+                alt="traveler">
+
+        </div>
+
+        <div class="global-warning-banner" id="globalWarningBanner">
+            ⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน
+        </div>
+
+        <div
+            class="question-card"
+            id="questionCard">
+        </div>
+
+        <div class="navigation">
+
+            <button
+                type="button"
+                class="nav-button"
+                id="backButton">
+
+                ← ย้อนกลับ
+
+            </button>
+
+            <button
+                type="button"
+                class="nav-button"
+                id="nextButton">
+
+                ถัดไป →
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+    DARK TOURISM POPUP (3-4 LINES + EXAMPLE)
+====================================================== -->
+
+<div
+    class="popup-layer"
+    id="darkTourismPopup">
+
+    <div class="dark-paper">
+
+        <div class="paper-label">
+            A NEW CHAPTER
+        </div>
+
+        <h2>
+            การท่องเที่ยวเชิงมืดคืออะไร?
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <p>
+            การท่องเที่ยวเชิงมืด (Dark Tourism) คือการเดินทางไปเยือนสถานที่ที่มีความเกี่ยวข้องกับความตาย ความสูญเสีย หรือโศกนาฏกรรมในประวัติศาสตร์ เพื่อเรียนรู้เรื่องราวและรำลึกถึงเหตุการณ์ในอดีต ตัวอย่างเช่น การเยี่ยมชมพิพิธภัณฑ์สงคราม อนุสรณ์สถาน หรือพื้นที่สนามรบจริง
+        </p>
+
+        <button
+            type="button"
+            class="paper-button"
+            id="continueDarkButton">
+
+            เปิดบทต่อไป ➜
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+    MATCHING
+====================================================== -->
+
+<section
+    class="page"
+    id="matching">
+
+    <div class="matching-content">
+
+        <div class="match-label">
+            FINAL ANALYSIS
+        </div>
+
+        <h2>
+            กำลังค้นหาตัวตนของคุณ...
+        </h2>
+
+        <div class="matching-text">
+
+            ระบบกำลังนำคำตอบของคุณมาวิเคราะห์
+            เพื่อค้นหารูปแบบการเดินทาง
+            และจับคู่กับบุคลิกนักเดินทาง
+
+        </div>
+
+        <div class="match-animation">
+
+            <div class="match-ring"></div>
+
+            <div class="match-ring"></div>
+
+            <div class="match-center">
+                ✦
+            </div>
+
+        </div>
+
+        <div
+            id="matchingStatus"
+            style="
+                color:#d8bb86;
+                font-size:12px;
+            ">
+
+            ANALYZING...
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+    RESULT
+====================================================== -->
+
+<section
+    class="page"
+    id="result">
+
+    <div class="result-content">
+
+        <div class="result-label">
+            YOUR DARK JOURNEY
+        </div>
+
+        <div
+            class="result-icon"
+            id="resultIcon">
+
+            ✦
+
+        </div>
+
+        <h2
+            class="result-name"
+            id="resultName">
+
+            THE TRAVELER
+
+        </h2>
+
+        <div
+            class="result-description"
+            id="resultDescription">
+        </div>
+
+        <div
+            class="result-score"
+            id="resultScore">
+        </div>
+
+        <button
+            type="button"
+            class="primary-button"
+            id="continueResultButton">
+
+            เดินทางต่อ ➜
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+    THANK YOU
+====================================================== -->
+
+<section
+    class="page"
+    id="thankyou">
+
+    <div class="thankyou-content">
+
+        <div class="thankyou-symbol">
+            ✦
+        </div>
+
+        <h2>
+            JOURNEY COMPLETE
+        </h2>
+
+        <div class="gold-line"></div>
+
+        <p>
+            ขอบคุณที่ร่วมเดินทางกับ
+            THE DARK JOURNEY
+        </p>
+
+        <p>
+            ทุกคำตอบของท่าน
+            มีส่วนสำคัญต่อการศึกษาครั้งนี้
+        </p>
+
+        <button
+            type="button"
+            class="primary-button"
+            id="restartButton">
+
+            เริ่มการเดินทางอีกครั้ง
+
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+<script>
+
+/* =========================================================
+    QUESTIONS (MAPPED ACCORDING TO USER REQUIREMENT)
+========================================================= */
+
+const questions = [
+
+/* ================= PART 1 (Page 0) ================= */
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"เพศ",
+    type:"choice",
+    options:["ชาย", "หญิง", "LGBTQ+", "ไม่ประสงค์ระบุ"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"อายุ",
+    type:"choice",
+    options:["18–25 ปี", "26–35 ปี", "36–45 ปี", "46–55 ปี", "56 ปีขึ้นไป"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"ระดับการศึกษา",
+    type:"choice",
+    options:["ต่ำกว่าปริญญาตรี", "ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก", "อื่น ๆ"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"อาชีพ",
+    type:"choice",
+    options:["นักเรียน/นักศึกษา", "ข้าราชการ/รัฐวิสาหกิจ", "พนักงานบริษัทเอกชน", "ธุรกิจส่วนตัว/เจ้าของธุรกิจ", "ว่างงาน", "อื่น ๆ"]
+},
+
+/* ================= PART 1 (Page 1) ================= */
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"รายได้เฉลี่ยต่อเดือน",
+    type:"choice",
+    options:["ต่ำกว่า 15,000 บาท", "15,001–30,000 บาท", "30,001–50,000 บาท", "มากกว่า 50,001 บาท"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"ภูมิลำเนา",
+    type:"choice",
+    options:["ภาคเหนือ", "ภาคตะวันออกเฉียงเหนือ", "ภาคกลาง", "ภาคตะวันออก", "ภาคตะวันตก", "ภาคใต้", "กรุงเทพมหานคร", "ภูมิภาคอื่น ๆ/นอกประเทศไทย"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"โดยปกติแล้วท่านเดินทางท่องเที่ยวพักผ่อนกี่ครั้งต่อปี",
+    type:"choice",
+    options:["1–2 ครั้ง", "3–5 ครั้ง", "6–10 ครั้ง", "มากกว่า 10 ครั้ง", "ไม่ได้เดินทางเพื่อการพักผ่อน"]
+},
+{
+    part:1,
+    headerTitle:"PART I",
+    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
+    subDesc:"กรุณาเลือกตอบตามความเป็นจริง",
+    question:"โดยทั่วไป ท่านสนใจหัวข้อใดมากที่สุด",
+    type:"choice",
+    options:["ประวัติศาสตร์", "วัฒนธรรม", "การท่องเที่ยว", "สงครามและความขัดแย้ง", "ภัยพิบัติทางธรรมชาติ", "เรื่องลึกลับและเหตุการณ์ที่อธิบายไม่ได้", "อาชญากรรมและเรื่องจริง", "อื่น ๆ"]
+},
+
+/* ================= PART 2 (Page 2) ================= */
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ท่านเคยพบเห็นหรือเคยรับรู้เกี่ยวกับสถานที่ท่องเที่ยวลักษณะดังกล่าวหรือไม่",
+    type:"choice",
+    options:["เคย", "ไม่เคย", "ไม่แน่ใจ"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ก่อนทำแบบสอบถามนี้ ท่านเคยได้ยินคำว่า “การท่องเที่ยวเชิงมืด (Dark Tourism)” มาก่อนหรือไม่",
+    type:"choice",
+    options:["เคย และเข้าใจความหมาย", "เคย แต่ไม่แน่ใจหมายถึงอะไร", "เคยเห็นหรือได้ยินผ่านๆ แต่ไม่ทราบว่าเรียกว่าอะไร", "ไม่เคยได้ยินคำนี้มาก่อน"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ท่านรู้จักหรือรับทราบข้อมูลเกี่ยวกับแหล่งท่องเที่ยวประวัติศาสตร์สงครามมากน้อยเพียงใด",
+    type:"choice",
+    options:["ไม่รู้จักเลย", "รู้จักเล็กน้อย", "รู้จักพอสมควร", "รู้จักดี", "รู้จักเป็นอย่างดี"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ท่านเคยติดตามข่าวสาร/ข้อมูลเกี่ยวกับสงคราม ความขัดแย้ง เหตุการณ์ทางประวัติศาสตร์ บ่อยเพียงใด",
+    type:"choice",
+    options:["ไม่เคย", "นาน ๆ ครั้ง", "บางครั้ง", "บ่อยครั้ง", "เป็นประจำ"]
+},
+
+/* ================= PART 2 (Page 3) ================= */
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้สถานที่ท่องเที่ยว (ต่อ)",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ท่านเคยเดินทางไปเยี่ยมชมสถานที่ที่มีลักษณะดังกล่าวหรือไม่",
+    type:"choice",
+    options:["เคย", "ไม่เคย", "ไม่แน่ใจ"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้สถานที่ท่องเที่ยว (ต่อ)",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"หากเคย ท่านเคยเยี่ยมชมสถานที่ประเภทใดบ้าง (เลือกได้หลายข้อ)",
+    type:"multi",
+    options:["สนามรบ/พื้นที่เคยเกิดการสู้รบ", "อนุสรณ์สถานสงคราม", "พิพิธภัณฑ์สงคราม/ประวัติศาสตร์", "สุสานทหาร", "ค่ายเชลยศึก", "สถานที่เกิดเหตุการณ์โศกนาฏกรรม", "ภัยพิบัติ", "อื่น ๆ"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้สถานที่ท่องเที่ยว (ต่อ)",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"ท่านเคยได้รับข้อมูลเกี่ยวกับแหล่งท่องเที่ยวเชิงมืดจากแหล่งใดบ้าง",
+    type:"multi",
+    options:["Facebook", "TikTok", "YouTube", "Instagram", "เว็บไซต์ท่องเที่ยว", "ข่าว/สื่อ", "เพื่อน/ครอบครัว", "สถานศึกษา", "อื่น ๆ"]
+},
+{
+    part:2,
+    headerTitle:"PART II",
+    mainTitle:"การรับรู้สถานที่ท่องเที่ยว (ต่อ)",
+    subDesc:"การรับรู้เกี่ยวกับประสบการณ์ที่เกี่ยวข้องกับความตาย โศกนาฏกรรม และสถานที่ประวัติศาสตร์สงคราม",
+    question:"หากท่านเคยเยี่ยมชมสถานที่ที่เกี่ยวข้องกับสงครามหรือโศกนาฏกรรม เหตุผลใดที่ทำให้ท่านสนใจเดินทางไปสถานที่ดังกล่าว",
+    type:"multi",
+    options:["ได้รับความรู้หรือความเข้าใจประวัติศาสตร์มากขึ้น", "รู้สึกอยากเรียนรู้เกี่ยวกับเหตุการณ์นั้นเพิ่มเติม", "รู้สึกเห็นอกเห็นใจผู้ที่ได้รับผลกระทบ", "รู้สึกตระหนักถึงคุณค่าของชีวิตมากขึ้น", "รู้สึกเคารพต่อความทรงจำของผู้ที่ได้รับผลกระทบ", "รู้สึกเศร้าหรือสะเทือนใจ", "รู้สึกว่าการได้เห็นสถานที่จริงช่วยให้เข้าใจมากขึ้น", "อื่น ๆ"]
+},
+
+/* ================= PART 3 (Page 4) ================= */
+{
+    part:3,
+    headerTitle:"PART III",
+    mainTitle:"ด้านความสนใจประวัติศาสตร์ของท่าน",
+    subDesc:"แบบสอบถามนี้จัดทำเพื่อรับฟังความคิดเห็นเกี่ยวกับความสนใจประวัติศาสตร์ โปรดคลิกตัวเลือกหรือข้อความตามความคิดของท่านต่อประเด็นต่อไปนี้มากที่สุด",
+    type:"rating",
+    title:"โปรดเลือกระดับความคิดเห็นของท่าน",
+    subquestions:[
+        "ฉันสนใจเรียนรู้ประวัติศาสตร์ผ่านการเดินทาง",
+        "ฉันชอบเยี่ยมชมสถานที่ที่มีความสำคัญทางประวัติศาสตร์",
+        "ฉันชอบศึกษาประวัติหรือเรื่องราวของสถานที่ก่อนเดินทาง",
+        "การเรียนรู้เรื่องราวในอดีตเป็นแรงจูงใจให้ฉันเดินทาง",
+        "ฉันเห็นว่าการเยี่ยมชมสถานที่จริงช่วยให้เข้าใจประวัติศาสตร์ได้มากขึ้น"
+    ]
+},
+
+/* ================= PART 4 (Page 5) ================= */
+{
+    part:4,
+    headerTitle:"PART IV",
+    mainTitle:"ด้านอิทธิพลของสื่อสังคมและสื่อออนไลน์ของท่าน",
+    subDesc:"แบบสอบถามนี้จัดทำเพื่อรับฟังความคิดเห็นเกี่ยวกับอิทธิพลของสื่อสังคมและสื่อออนไลน์ โปรดคลิกตัวเลือกหรือข้อความตามความคิดของท่านต่อประเด็นต่อไปนี้มากที่สุด",
+    type:"rating",
+    title:"โปรดเลือกระดับความคิดเห็นของท่าน",
+    subquestions:[
+        "ฉันมักพบข้อมูลแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามผ่านสื่อออนไลน์",
+        "รีวิว/วิดีโอในสื่อออนไลน์ทำให้ฉันสนใจแหล่งท่องเที่ยวประเภทนี้มากขึ้น",
+        "สื่อออนไลน์ช่วยให้ฉันรู้จักแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามมากขึ้น",
+        "ฉันมักค้นหาข้อมูลเกี่ยวกับแหล่งท่องเที่ยวผ่านสื่อออนไลน์ก่อนตัดสินใจเดินทาง",
+        "ข้อมูลที่เกี่ยวกับแหล่งท่องเที่ยวจากสื่อออนไลน์มีอิทธิพลต่อการตัดสินใจเดินทางของฉัน"
+    ]
+},
+
+/* ================= PART 5 (Page 6) ================= */
+{
+    part:5,
+    headerTitle:"PART V",
+    mainTitle:"ด้านความอยากรู้อยากเห็นของท่าน",
+    subDesc:"แบบสอบถามนี้จัดทำเพื่อรับฟังความคิดเห็นเกี่ยวกับความอยากรู้อยากเห็น โปรดคลิกตัวเลือกหรือข้อความตามความคิดของท่านต่อประเด็นต่อไปนี้มากที่สุด",
+    type:"rating",
+    title:"โปรดเลือกระดับความคิดเห็นของท่าน",
+    subquestions:[
+        "ฉันอยากเห็นสถานที่จริงที่เคยเกิดเหตุการณ์สำคัญ",
+        "ฉันสนใจเรื่องราวเบื้องหลังของสถานที่ที่เกี่ยวข้องกับเหตุการณ์ในอดีต",
+        "ฉันอยากสัมผัสบรรยากาศของสถานที่จริงที่มีทางประวัติศาสตร์",
+        "เมื่อได้รับรู้เรื่องราว ฉันมักอยากไปเห็นสถานที่ด้วยตนเอง",
+        "ฉันมักค้นหาข้อมูลเพิ่มเติมเกี่ยวกับสถานที่ที่มีเรื่องราวทางประวัติศาสตร์"
+    ]
+},
+
+/* ================= PART 6 (Page 7) ================= */
+{
+    part:6,
+    headerTitle:"PART VI",
+    mainTitle:"ความตั้งใจในการเดินทาง",
+    subDesc:"แบบสอบถามนี้จัดทำเพื่อรับฟังความคิดเห็นเกี่ยวกับความตั้งใจเดินทาง โปรดคลิกตัวเลือกหรือข้อความตามความคิดของท่านต่อประเด็นต่อไปนี้มากที่สุด",
+    type:"rating",
+    title:"โปรดเลือกระดับความตั้งใจในการเดินทางของท่าน",
+    subquestions:[
+        "ฉันตั้งใจจะเดินทางไปยังแหล่งท่องเที่ยวประวัติศาสตร์สงครามในอนาคต",
+        "หากมีโอกาส ฉันจะเลือกเดินทางไปสถานที่ประเภทนี้",
+        "ฉันมีแนวโน้มจะวางแผนเดินทางไปยังแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงคราม",
+        "ฉันมีความต้องการเดินทางไปสถานที่ประเภทนี้",
+        "ฉันยินดีใช้เวลาและค่าใช้จ่ายเพื่อเดินทางไปสถานที่ท่องเที่ยวดังกล่าว"
+    ]
+},
+
+/* ================= PART 7 (Page 8) ================= */
+{
+    part:7,
+    headerTitle:"PART VII",
+    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
+    subDesc:"เราอยากรับฟังความคิดเห็นและข้อเสนอแนะสำหรับการพัฒนาจากท่าน โปรดพิมพ์ความคิดเห็นของท่านในช่องด้านล่าง",
+    question:"1. ท่านมีความคิดเห็นหรือความรู้สึกอย่างไร ต่อการเดินทางท่องเที่ยวไปยังสถานที่เกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรม",
+    type:"text"
+},
+{
+    part:7,
+    headerTitle:"PART VII",
+    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
+    subDesc:"เราอยากรับฟังความคิดเห็นและข้อเสนอแนะสำหรับการพัฒนาจากท่าน โปรดพิมพ์ความคิดเห็นของท่านในช่องด้านล่าง",
+    question:"2. อะไรคือเหตุผลสำคัญที่ทำให้ท่านสนใจ หรือไม่สนใจ เดินทางไปแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย",
+    type:"text"
+},
+{
+    part:7,
+    headerTitle:"PART VII",
+    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
+    subDesc:"เราอยากรับฟังความคิดเห็นและข้อเสนอแนะสำหรับการพัฒนาจากท่าน โปรดพิมพ์ความคิดเห็นของท่านในช่องด้านล่าง",
+    question:"3. ท่านคิดว่าการนำเสนอเรื่องราวเกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรมควรมีลักษณะอย่างไร เพื่อความเหมาะสมและเคารพต่อผู้ที่ได้รับผลกระทบ",
+    type:"text"
+},
+{
+    part:7,
+    headerTitle:"PART VII",
+    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
+    subDesc:"เราอยากรับฟังความคิดเห็นและข้อเสนอแนะสำหรับการพัฒนาจากท่าน โปรดพิมพ์ความคิดเห็นของท่านในช่องด้านล่าง",
+    question:"4. ท่านมีข้อเสนอแนะเพิ่มเติมสำหรับการพัฒนาแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทยอย่างไร",
+    type:"text",
+    optional:true
+},
+{
+    part:7,
+    headerTitle:"PART VII",
+    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
+    subDesc:"เราอยากรับฟังความคิดเห็นและข้อเสนอแนะสำหรับการพัฒนาจากท่าน โปรดพิมพ์ความคิดเห็นของท่านในช่องด้านล่าง",
+    question:"5. ข้อเสนอแนะเพิ่มเติมอื่น ๆ (หากมี)",
+    type:"text",
+    optional:true
+}
+
+];
+
+/* =========================================================
+   PAGE GROUPING
+========================================================= */
+
+const pages = [];
+
+pages.push(questions.slice(0, 4));   // Part I (1)
+pages.push(questions.slice(4, 8));   // Part I (2)
+pages.push(questions.slice(8, 12));  // Part II (1)
+pages.push(questions.slice(12, 16)); // Part II (2)
+pages.push([questions[16]]);         // Part III
+pages.push([questions[17]]);         // Part IV
+pages.push([questions[18]]);         // Part V
+pages.push([questions[19]]);         // Part VI
+pages.push(questions.slice(20, 25)); // Part VII
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentPage = 0;
+let answers = {};
+let soundOn = true;
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const pageElements = document.querySelectorAll(".page");
+const startButton = document.getElementById("startButton");
+const openInfoButton = document.getElementById("openInfoButton");
+const researchPopup = document.getElementById("researchPopup");
+const acceptResearchButton = document.getElementById("acceptResearchButton");
+const agePopup = document.getElementById("agePopup");
+const ageYesButton = document.getElementById("ageYesButton");
+const ageNoButton = document.getElementById("ageNoButton");
+const darkTourismPopup = document.getElementById("darkTourismPopup");
+const continueDarkButton = document.getElementById("continueDarkButton");
+const questionCard = document.getElementById("questionCard");
+const nextButton = document.getElementById("nextButton");
+const backButton = document.getElementById("backButton");
+const soundButton = document.getElementById("soundButton");
+const ambientSound = document.getElementById("ambientSound");
+const clickSoundAudio = document.getElementById("clickSoundAudio");
+const paperSound = document.getElementById("paperSound");
+const globalWarningBanner = document.getElementById("globalWarningBanner");
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function playClick(){
+    if(!soundOn) return;
+    try{
+        clickSoundAudio.currentTime = 0;
+        clickSoundAudio.play().catch(()=>{});
+    }catch(e){}
+}
+
+function playPaper(){
+    if(!soundOn) return;
+    try{
+        paperSound.currentTime = 0;
+        paperSound.play().catch(()=>{});
+    }catch(e){}
+}
+
+function startAmbient(){
+    if(!soundOn) return;
+    ambientSound.volume = .32;
+    ambientSound.play().catch(()=>{});
+}
+
+function stopAmbient(){
+    ambientSound.pause();
+}
+
+soundButton.addEventListener("click",()=>{
+    soundOn = !soundOn;
+    if(soundOn){
+        soundButton.textContent = "🔊";
+        startAmbient();
+    }else{
+        soundButton.textContent = "🔇";
+        stopAmbient();
+    }
+    if(soundOn){
+        playClick();
+    }
+});
+
+function showPage(id){
+    pageElements.forEach(page=>{
+        page.classList.remove("active");
+    });
+    const target = document.getElementById(id);
+    target.classList.add("active");
+}
+
+startButton.addEventListener("click",()=>{
+    playClick();
+    startAmbient();
+    showPage("intro");
+});
+
+openInfoButton.addEventListener("click",()=>{
+    playClick();
+    researchPopup.classList.add("active");
+});
+
+acceptResearchButton.addEventListener("click",()=>{
+    playPaper();
+    researchPopup.classList.remove("active");
+    setTimeout(()=>{
+        agePopup.classList.add("active");
+    },250);
+});
+
+ageYesButton.addEventListener("click",()=>{
+    playClick();
+    agePopup.classList.remove("active");
+    currentPage = 0;
+    showPage("survey");
+    renderPage();
+});
+
+ageNoButton.addEventListener("click",()=>{
+    playClick();
+    agePopup.innerHTML = `
+        <div class="info-paper">
+            <div class="paper-label">PARTICIPANT ELIGIBILITY</div>
+            <h2 class="paper-title">ขอขอบคุณสำหรับความสนใจ</h2>
+            <div class="gold-line"></div>
+            <div class="paper-text" style="text-align:center;">
+                แบบสอบถามฉบับนี้กำหนดกลุ่มตัวอย่างเป็นบุคคลที่มีอายุ 18 ปีขึ้นไป
+                <br><br>
+                ท่านจึงไม่สามารถเข้าสู่แบบสอบถามในครั้งนี้ได้
+            </div>
+            <button type="button" class="paper-button" onclick="location.reload()">กลับหน้าหลัก</button>
+        </div>
+    `;
+});
+
+function getSection(pageQuestions){
+    return pageQuestions[0].headerTitle || "ส่วนที่ 1";
+}
+
+function renderPage(){
+    const pageQuestions = pages[currentPage];
+    const section = getSection(pageQuestions);
+
+    document.getElementById("sectionLabelTop").textContent = section;
+    document.getElementById("pageNumber").textContent = currentPage + 1;
+    document.getElementById("totalPageNumber").textContent = pages.length;
+
+    const percent = Math.round(((currentPage + 1) / pages.length) * 100);
+    document.getElementById("percentText").textContent = percent + "%";
+    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("walker").style.left = percent + "%";
+
+    globalWarningBanner.classList.remove("active");
+    questionCard.innerHTML = "";
+    questionCard.scrollTop = 0;
+
+    const heading = document.createElement("div");
+    heading.className = "page-heading";
+    heading.innerHTML = `
+        <div class="section-label">${pageQuestions[0].mainTitle}</div>
+        <h2 class="page-title">${pageQuestions[0].subDesc}</h2>
+    `;
+    questionCard.appendChild(heading);
+
+    pageQuestions.forEach((q,index)=>{
+        if(q.type === "choice"){
+            renderChoice(q, index);
+        }
+        if(q.type === "multi"){
+            renderMulti(q, index);
+        }
+        if(q.type === "rating"){
+            renderRating(q, index);
+        }
+        if(q.type === "text"){
+            renderText(q, index);
+        }
+    });
+
+    updateNavigation();
+    requestAnimationFrame(()=>{
+        questionCard.scrollTop = 0;
+    });
+}
+
+/* =========================================================
+   CHOICE
+========================================================= */
+
+function renderChoice(q,index){
+    const key = "q_" + questions.indexOf(q);
+    const item = document.createElement("div");
+    item.className = "question-item";
+    item.id = "q_item_" + questions.indexOf(q);
+
+    const number = document.createElement("div");
+    number.className = "question-number";
+    number.textContent = q.question.split(".")[0];
+    item.appendChild(number);
+
+    const title = document.createElement("h3");
+    title.className = "question-text";
+    title.textContent = q.question;
+    item.appendChild(title);
+
+    const answersBox = document.createElement("div");
+    answersBox.className = "answers";
+
+    renderChoiceState(q, item, answersBox, key);
+    item.appendChild(answersBox);
+    questionCard.appendChild(item);
+}
+
+function renderChoiceState(q, item, answersBox, key){
+    answersBox.innerHTML = "";
+    let value = answers[key];
+
+    q.options.forEach(option=>{
+        const wrapper = document.createElement("div");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "answer";
+        button.textContent = option;
+
+        const isOther = option.includes("อื่น");
+
+        if(isOther && typeof value === "object" && value !== null){
+            button.classList.add("selected");
+        } else if(value === option){
+            button.classList.add("selected");
+        }
+
+        button.addEventListener("click",()=>{
+            playClick();
+            if(isOther){
+                answers[key] = {
+                    type:"other",
+                    detail: (typeof value === "object" && value !== null) ? value.detail : ""
+                };
+            }else{
+                answers[key] = option;
+            }
+
+            item.classList.remove("incomplete");
+            const oldMsg = item.querySelector(".incomplete-message");
+            if(oldMsg) oldMsg.remove();
+
+            const unansweredCount = countUnansweredOnPage();
+            if(unansweredCount === 0){
+                globalWarningBanner.classList.remove("active");
+            } else {
+                globalWarningBanner.textContent = 
+                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+            }
+
+            updateNavigation();
+            renderChoiceState(q, item, answersBox, key);
+        });
+
+        wrapper.appendChild(button);
+
+        if(isOther && typeof value === "object" && value !== null){
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "other-input";
+            input.placeholder = "โปรดระบุรายละเอียด...";
+            input.value = value.detail || "";
+            input.addEventListener("input", e=>{
+                if(answers[key] && typeof answers[key] === "object"){
+                    answers[key].detail = e.target.value;
+                }
+                if(e.target.value.trim() !== ""){
+                    item.classList.remove("incomplete");
+                    const oldMsg = item.querySelector(".incomplete-message");
+                    if(oldMsg) oldMsg.remove();
+                }
+                updateNavigation();
+            });
+            wrapper.appendChild(input);
+        }
+
+        answersBox.appendChild(wrapper);
+    });
+}
+
+/* =========================================================
+   MULTI
+========================================================= */
+
+function renderMulti(q,index){
+    const key = "q_" + questions.indexOf(q);
+    const item = document.createElement("div");
+    item.className = "question-item";
+    item.id = "q_item_" + questions.indexOf(q);
+
+    const number = document.createElement("div");
+    number.className = "question-number";
+    number.textContent = q.question.split(".")[0];
+    item.appendChild(number);
+
+    const title = document.createElement("h3");
+    title.className = "question-text";
+    title.textContent = q.question;
+    item.appendChild(title);
+
+    const answersBox = document.createElement("div");
+    answersBox.className = "answers";
+
+    renderMultiState(q, item, answersBox, key);
+    item.appendChild(answersBox);
+    questionCard.appendChild(item);
+}
+
+function renderMultiState(q, item, answersBox, key){
+    answersBox.innerHTML = "";
+    let current = Array.isArray(answers[key]) ? answers[key] : [];
+
+    q.options.forEach(option=>{
+        const wrapper = document.createElement("div");
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "answer";
+        button.textContent = option;
+
+        const isOther = option.includes("อื่น");
+        const otherObject = current.find(
+            x => typeof x === "object" && x !== null && x.type === "other"
+        );
+        const selected = isOther ? !!otherObject : current.includes(option);
+
+        if(selected){
+            button.classList.add("selected");
+        }
+
+        button.addEventListener("click",()=>{
+            playClick();
+            let list = Array.isArray(answers[key]) ? [...answers[key]] : [];
+
+            if(isOther){
+                if(otherObject){
+                    list = list.filter(
+                        x => !(typeof x === "object" && x !== null && x.type === "other")
+                    );
+                }else{
+                    list.push({
+                        type:"other",
+                        detail:""
+                    });
+                }
+            }else{
+                if(list.includes(option)){
+                    list = list.filter(x => x !== option);
+                }else{
+                    list.push(option);
+                }
+            }
+
+            answers[key] = list;
+
+            if(list.length > 0){
+                item.classList.remove("incomplete");
+                const oldMsg = item.querySelector(".incomplete-message");
+                if(oldMsg) oldMsg.remove();
+            }
+
+            const unansweredCount = countUnansweredOnPage();
+            if(unansweredCount === 0){
+                globalWarningBanner.classList.remove("active");
+            } else {
+                globalWarningBanner.textContent = 
+                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+            }
+
+            updateNavigation();
+            renderMultiState(q, item, answersBox, key);
+        });
+
+        wrapper.appendChild(button);
+
+        if(isOther && otherObject){
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "other-input";
+            input.placeholder = "โปรดระบุรายละเอียด...";
+            input.value = otherObject.detail || "";
+
+            input.addEventListener("input", e=>{
+                otherObject.detail = e.target.value;
+                if(e.target.value.trim() !== ""){
+                    item.classList.remove("incomplete");
+                    const oldMsg = item.querySelector(".incomplete-message");
+                    if(oldMsg) oldMsg.remove();
+                }
+                updateNavigation();
+            });
+
+            wrapper.appendChild(input);
+        }
+
+        answersBox.appendChild(wrapper);
+    });
+}
+
+/* =========================================================
+   RATING
+========================================================= */
+
+function renderRating(q,index){
+    const key = "q_" + questions.indexOf(q);
+    let value = answers[key] || {};
+
+    const intro = document.createElement("div");
+    intro.className = "question-item";
+    intro.innerHTML = `
+        <div class="rating-text" style="text-align:center;color:#d8bb86;">
+            ระดับความคิดเห็น
+            <br>
+            <small style="color:#9f927b;">
+                5 = มากที่สุด · 1 = น้อยที่สุด
+            </small>
+        </div>
+    `;
+    questionCard.appendChild(intro);
+
+    q.subquestions.forEach((text,subIndex)=>{
+        const box = document.createElement("div");
+        box.className = "rating-question";
+        box.id = "rating_item_" + questions.indexOf(q) + "_" + subIndex;
+
+        const title = document.createElement("div");
+        title.className = "rating-text";
+        title.textContent = (subIndex + 1) + ". " + text;
+        box.appendChild(title);
+
+        const row = document.createElement("div");
+        row.className = "rating-row";
+
+        const labels = ["มากที่สุด", "มาก", "ปานกลาง", "น้อย", "น้อยที่สุด"];
+
+        [5,4,3,2,1].forEach((score,i)=>{
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "rating-choice";
+
+            if(value[subIndex] === score){
+                button.classList.add("selected");
+            }
+
+            button.innerHTML = `
+                <span>${score}</span>
+                ${labels[i]}
+            `;
+
+            button.addEventListener("click", ()=>{
+                playClick();
+                if(!answers[key]){
+                    answers[key] = {};
+                }
+                answers[key][subIndex] = score;
+
+                box.classList.remove("incomplete");
+                const oldMsg = box.querySelector(".incomplete-message");
+                if(oldMsg) oldMsg.remove();
+
+                const unansweredCount = countUnansweredOnPage();
+                if(unansweredCount === 0){
+                    globalWarningBanner.classList.remove("active");
+                } else {
+                    globalWarningBanner.textContent = 
+                        `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+                }
+
+                updateNavigation();
+
+                row.querySelectorAll(".rating-choice").forEach(btn => {
+                    if(btn.innerHTML.includes(`<span>${score}</span>`)){
+                        btn.classList.add("selected");
+                    } else {
+                        btn.classList.remove("selected");
+                    }
+                });
+            });
+
+            row.appendChild(button);
+        });
+
+        box.appendChild(row);
+        questionCard.appendChild(box);
+    });
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+function renderText(q,index){
+    const key = "q_" + questions.indexOf(q);
+    const item = document.createElement("div");
+    item.className = "question-item";
+    item.id = "q_item_" + questions.indexOf(q);
+
+    const number = document.createElement("div");
+    number.className = "question-number";
+    number.textContent = q.question.split(".")[0];
+    item.appendChild(number);
+
+    const title = document.createElement("h3");
+    title.className = "question-text";
+    title.textContent = q.question;
+    item.appendChild(title);
+
+    const textarea = document.createElement("textarea");
+    textarea.className = "text-answer";
+    textarea.placeholder = q.optional ? "สามารถระบุข้อเสนอแนะเพิ่มเติมได้..." : "พิมพ์ความคิดเห็นของท่าน...";
+    textarea.value = answers[key] || "";
+
+    textarea.addEventListener("input", e=>{
+        answers[key] = e.target.value;
+        if(e.target.value.trim() !== ""){
+            item.classList.remove("incomplete");
+            const oldMsg = item.querySelector(".incomplete-message");
+            if(oldMsg) oldMsg.remove();
+        }
+        const unansweredCount = countUnansweredOnPage();
+        if(unansweredCount === 0){
+            globalWarningBanner.classList.remove("active");
+        }
+        updateNavigation();
+    });
+
+    item.appendChild(textarea);
+    questionCard.appendChild(item);
+}
+
+/* =========================================================
+   VALIDATION & COUNT UNANSWERED
+========================================================= */
+
+function questionAnswered(q){
+    const key = "q_" + questions.indexOf(q);
+    const value = answers[key];
+
+    if(q.optional) return true;
+
+    if(q.type === "choice"){
+        if(!value) return false;
+        if(typeof value === "object" && value !== null){
+            return (value.detail && value.detail.trim() !== "");
+        }
+        return true;
+    }
+
+    if(q.type === "multi"){
+        if(!Array.isArray(value) || value.length === 0) return false;
+        const other = value.find(x => typeof x === "object" && x !== null && x.type === "other");
+        if(other){
+            return (other.detail && other.detail.trim() !== "");
+        }
+        return true;
+    }
+
+    if(q.type === "rating"){
+        if(!value || typeof value !== "object") return false;
+        return (Object.keys(value).length === q.subquestions.length);
+    }
+
+    if(q.type === "text"){
+        return (value && value.trim() !== "");
+    }
+
+    return false;
+}
+
+function pageAnswered(){
+    const pageQuestions = pages[currentPage];
+    return pageQuestions.every(q => questionAnswered(q));
+}
+
+function countUnansweredOnPage(){
+    const pageQuestions = pages[currentPage];
+    let count = 0;
+    pageQuestions.forEach(q=>{
+        if(!questionAnswered(q)){
+            count++;
+        }
+    });
+    return count;
+}
+
+function findFirstUnanswered(){
+    const pageQuestions = pages[currentPage];
+    for(let i = 0; i < pageQuestions.length; i++){
+        const q = pageQuestions[i];
+        if(!questionAnswered(q)){
+            return { question: q, index: i };
+        }
+    }
+    return null;
+}
+
+function showIncompleteWarning(){
+    const unansweredCount = countUnansweredOnPage();
+    globalWarningBanner.textContent = `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+    globalWarningBanner.classList.add("active");
+
+    const result = findFirstUnanswered();
+    if(!result) return;
+
+    const targetQuestion = result.question;
+    const targetIndex = result.index;
+    const globalQIndex = questions.indexOf(targetQuestion);
+    const key = "q_" + globalQIndex;
+
+    if(targetQuestion.type === "rating"){
+        const value = answers[key] || {};
+        let firstMissing = -1;
+        for(let i = 0; i < targetQuestion.subquestions.length; i++){
+            if(value[i] === undefined){
+                firstMissing = i;
+                break;
+            }
+        }
+
+        if(firstMissing >= 0){
+            const target = document.getElementById("rating_item_" + globalQIndex + "_" + firstMissing);
+            if(target){
+                target.classList.remove("incomplete");
+                void target.offsetWidth;
+                target.classList.add("incomplete");
+
+                const oldMsg = target.querySelector(".incomplete-message");
+                if(oldMsg) oldMsg.remove();
+
+                const message = document.createElement("div");
+                message.className = "incomplete-message";
+                message.textContent = "⚠ กรุณาให้คะแนนข้อย่อยนี้ก่อนดำเนินการต่อ";
+                target.appendChild(message);
+
+                setTimeout(()=>{
+                    target.scrollIntoView({ behavior:"smooth", block:"center" });
+                },80);
+            }
+        }
+        return;
+    }
+
+    const target = document.getElementById("q_item_" + globalQIndex);
+    if(target){
+        target.classList.remove("incomplete");
+        void target.offsetWidth;
+        target.classList.add("incomplete");
+
+        const oldMsg = target.querySelector(".incomplete-message");
+        if(oldMsg) oldMsg.remove();
+
+        const message = document.createElement("div");
+        message.className = "incomplete-message";
+        message.textContent = "⚠ กรุณาตอบคำถามข้อนี้ก่อนดำเนินการต่อ";
+        target.appendChild(message);
+
+        setTimeout(()=>{
+            target.scrollIntoView({ behavior:"smooth", block:"center" });
+        },80);
+    }
+}
+
+function updateNavigation(){
+    backButton.disabled = currentPage === 0;
+    nextButton.disabled = false;
+
+    if(currentPage === pages.length - 1){
+        nextButton.textContent = "ส่งคำตอบ ✦";
+    }else{
+        nextButton.textContent = "ถัดไป →";
+    }
+}
+
+nextButton.addEventListener("click", ()=>{
+    if(!pageAnswered()){
+        playClick();
+        showIncompleteWarning();
+        return;
+    }
+
+    playClick();
+    globalWarningBanner.classList.remove("active");
+
+    // แสดงป๊อปอัพ "การท่องเที่ยวเชิงมืดคืออะไร?" ก่อนเข้าหน้า Part II (หลังจากจบหน้า Index ที่ 1 ซึ่งคือหน้าสุดท้ายของ Part I)
+    if(currentPage === 1){
+        playPaper();
+        darkTourismPopup.classList.add("active");
+        return;
+    }
+
+    goNext();
+});
+
+continueDarkButton.addEventListener("click", ()=>{
+    playClick();
+    darkTourismPopup.classList.remove("active");
+    goNext();
+});
+
+function goNext(){
+    if(currentPage < pages.length - 1){
+        currentPage++;
+        renderPage();
+        requestAnimationFrame(()=>{
+            questionCard.scrollTop = 0;
+        });
+    }else{
+        finishSurvey();
+    }
+}
+
+backButton.addEventListener("click", ()=>{
+    if(currentPage <= 0) return;
+    playClick();
+    currentPage--;
+    renderPage();
+    requestAnimationFrame(()=>{
+        questionCard.scrollTop = 0;
+    });
+});
+
+function finishSurvey(){
+
+    playClick();
+
+    showPage("matching");
+
+    // --- โค้ดส่งข้อมูลไปยัง Google Sheets ---
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxixn2vzCebAlZzeHR8E6DZnF5QHBuXIm_QyAojW-U9gFtj6WgzPiYo7xAVEeY0AF49/exec";
+    
+    fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(answers)
+    })
+    .then(response => console.log('Success'))
+    .catch(error => console.error('Error!', error.message));
+    // ---------------------------------
+
+    setTimeout(
+        showResult,
+        3000
+    );
+
+}
+const characters = [
+    {
+        name:"THE HISTORIAN",
+        icon:"📜",
+        description:"คุณคือผู้ค้นหาอดีต คุณเดินทางเพื่อทำความเข้าใจประวัติศาสตร์ เหตุการณ์ และเรื่องราวที่เกิดขึ้นในสถานที่นั้นอย่างลึกซึ้ง"
+    },
+    {
+        name:"THE OBSERVER",
+        icon:"👁️",
+        description:"คุณคือผู้เฝ้ามอง คุณสนใจรายละเอียด บรรยากาศ และเรื่องราวที่ซ่อนอยู่เบื้องหลังสถานที่"
+    },
+    {
+        name:"THE WANDERER",
+        icon:"🧭",
+        description:"คุณคือนักเดินทางผู้แสวงหาประสบการณ์ใหม่ คุณสนใจสถานที่ที่แตกต่างและประสบการณ์ที่ไม่เหมือนการท่องเที่ยวทั่วไป"
+    },
+    {
+        name:"THE STORYTELLER",
+        icon:"📷",
+        description:"คุณคือผู้ถ่ายทอดเรื่องราว คุณมองสถานที่ผ่านภาพ เรื่องเล่า และประสบการณ์ที่สามารถส่งต่อให้ผู้อื่น"
+    },
+    {
+        name:"THE MEMORIAL",
+        icon:"🕯️",
+        description:"คุณคือผู้รำลึก คุณให้คุณค่ากับความทรงจำ ความสูญเสีย และความหมายของชีวิตที่เชื่อมโยงกับสถานที่"
+    }
+];
+
+function showResult(){
+    const best = characters[Math.floor(Math.random() * characters.length)];
+
+    document.getElementById("matchingStatus").textContent = "MATCH FOUND";
+    document.getElementById("resultIcon").textContent = best.icon;
+    document.getElementById("resultName").textContent = best.name;
+    document.getElementById("resultDescription").textContent = best.description;
+    document.getElementById("resultScore").textContent = "PERSONALITY MATCH • COMPLETED";
+
+    setTimeout(()=>{
+        showPage("result");
+    }, 700);
+}
+
+document.getElementById("continueResultButton").addEventListener("click", ()=>{
+    playClick();
+    showPage("thankyou");
+});
+
+document.getElementById("restartButton").addEventListener("click", ()=>{
+    playClick();
+    answers = {};
+    currentPage = 0;
+    location.reload();
+});
+
+renderPage();
+
+</script>
+
+</body>
+</html>
