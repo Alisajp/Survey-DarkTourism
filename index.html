@@ -190,7 +190,7 @@ button{
 }
 
 /* =========================================================
-    SOUND BUTTON
+    SOUND BUTTON (เปลี่ยนเป็นไอคอนลำโพงสีขาวทึบ มินิมอล)
 ========================================================= */
 
 .sound-button{
@@ -206,13 +206,21 @@ button{
     border:1px solid rgba(216,187,134,.55);
 
     background:rgba(10,8,6,.75);
-    color:#eee0c4;
+    color:#fff; /* เปลี่ยนเป็นสีขาวทึบ */
 
     cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     backdrop-filter:blur(8px);
-
     transition:.25s;
+}
+
+.sound-button svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff; /* บังคับให้ไอคอนลำโพงเป็นสีขาวทึบ */
 }
 
 .sound-button:hover{
@@ -737,86 +745,66 @@ button{
 }
 
 /* =========================================================
-    PROGRESS
+    PROGRESS (จัดระเบียบใหม่ไม่ให้ทับซ้อนและไม่มีกรอบวงกลม)
 ========================================================= */
 
 .survey-top{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     color:#d8bb86;
-
     font-family:"Cormorant Garamond",serif;
-
     font-size:12px;
-
     letter-spacing:1px;
-
-    margin-bottom:7px;
+    margin-bottom:8px;
 }
 
 .progress-wrapper{
     position:relative;
-
     width:100%;
-
-    margin-bottom:18px;
+    height:28px; /* พอดีสำหรับตัว GIF เดิน */
+    display:flex;
+    align-items:flex-end;
+    margin-bottom:15px;
 }
 
 .progress{
     width:100%;
-
     height:6px;
-
     border-radius:20px;
-
     background:rgba(216,187,134,.14);
-
-    overflow:visible;
-
     position:relative;
 }
 
 .progress-bar{
     height:100%;
-
     width:0%;
-
     border-radius:20px;
-
     background:
         linear-gradient(
             90deg,
             #72552e,
             #d8bb86
         );
-
     transition:
         width .5s cubic-bezier(.22,.61,.36,1);
 }
 
+/* เอาสไตล์วงกลมออก จัดตัว GIF ให้เกาะอยู่บนเส้นพอดี */
 .walker{
     position:absolute;
-
-    top:-23px;
-
+    bottom:2px;
     left:0%;
-
-    width:48px;
-    height:48px;
-
+    width:34px; 
+    height:auto;
     object-fit:contain;
-
     transform:translateX(-50%);
-
+    background: transparent; /* ไม่มีพื้นหลัง */
+    border: none; /* ไม่มีกรอบ */
+    box-shadow: none; /* ไม่มีเงาวงกลม */
     transition:
         left .5s cubic-bezier(.22,.61,.36,1);
-
-    filter:
-        drop-shadow(0 3px 5px rgba(0,0,0,.7));
+    z-index:5;
 }
 
 /* =========================================================
@@ -1675,9 +1663,8 @@ button{
     }
 
     .walker{
-        width:42px;
-        height:42px;
-        top:-20px;
+        width:30px;
+        bottom:2px;
     }
 
     .info-paper,
@@ -1717,11 +1704,15 @@ button{
        preload="auto">
 </audio>
 
+<!-- ปุ่มเสียง: เปลี่ยนเป็นไอคอนลำโพงสีขาวทึบ SVG แบบมินิมอล -->
 <button
     type="button"
     class="sound-button"
-    id="soundButton">
-    🔊
+    id="soundButton"
+    title="เปิด/ปิดเสียง">
+    <svg id="soundIcon" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>
 </button>
 
 <!-- ======================================================
@@ -2027,6 +2018,7 @@ button{
 
             </div>
 
+            <!-- ไฟล์ GIF ตัวเดินแบบไร้กรอบวงกลม -->
             <img
                 src="คนเดิน.gif"
                 class="walker"
@@ -2574,6 +2566,7 @@ const questionCard = document.getElementById("questionCard");
 const nextButton = document.getElementById("nextButton");
 const backButton = document.getElementById("backButton");
 const soundButton = document.getElementById("soundButton");
+const soundIcon = document.getElementById("soundIcon");
 const ambientSound = document.getElementById("ambientSound");
 const clickSoundAudio = document.getElementById("clickSoundAudio");
 const paperSound = document.getElementById("paperSound");
@@ -2612,10 +2605,12 @@ function stopAmbient(){
 soundButton.addEventListener("click",()=>{
     soundOn = !soundOn;
     if(soundOn){
-        soundButton.textContent = "🔊";
+        // ไอคอนลำโพงเปิดเสียง
+        soundIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
         startAmbient();
     }else{
-        soundButton.textContent = "🔇";
+        // ไอคอนลำโพงปิดเสียง (มีขีดคาด)
+        soundIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C22.63 14.85 23 13.47 23 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
         stopAmbient();
     }
     if(soundOn){
