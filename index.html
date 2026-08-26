@@ -2038,7 +2038,7 @@ button{
                 ทุกคำตอบของคุณมีส่วนช่วยในการศึกษาการท่องเที่ยวเชิงมืดในพื้นที่สงครามในประเทศไทย
             </div>
             <button type="button" class="primary-button" id="restartButton" style="max-width:170px;margin:5px auto 0 auto;padding:7px 12px;font-size:11.5px;">
-                เริ่มการเดินทางอีกครั้ง
+                เริ่มต้นการเดินทางอีกครั้ง
             </button>
         </div>
     </div>
@@ -3088,11 +3088,25 @@ function processSurveyCompletion() {
     document.getElementById("processingTextContainer").style.display = "block";
     document.getElementById("combinedThankyouContainer").style.display = "none";
 
+    // จัดรูปแบงข้อมูลก่อนส่ง ให้แยกคะแนนพาร์ท Rating ออกเป็นรายข้ออิสระ
+    let payload = {};
+    for(let key in answers){
+        let val = answers[key];
+        if(typeof val === "object" && val !== null && !Array.isArray(val) && val.type !== "other"){
+            for(let subK in val){
+                payload[key + "_" + subK] = val[subK];
+            }
+        } else {
+            payload[key] = val;
+        }
+    }
+
     const scriptURL = "https://script.google.com/macros/s/AKfycbzVPjGgWyA-4JpaSdo7VpjwwjtnpNUhuMxqRa8u6JRyeDUF-olhMiIPHWDTyl1tMRy3Dw/exec";
+    fetch(scriptURL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(answers)
+        body: JSON.stringify(payload)
     }).catch(err => console.error(err));
 
     const finalScores = calculateTraits();
