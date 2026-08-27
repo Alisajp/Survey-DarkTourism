@@ -3101,16 +3101,37 @@ function processSurveyCompletion() {
         }
     }
 
- const scriptURL = "https://script.google.com/macros/s/AKfycbzkGCoX--tonX3NM8QeZK1NB--KTmn-Ix__a0hN1dX5cZKBsezJYdtbbqnHLMWeaIvy/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzkGCoX--tonX3NM8QeZK1NB--KTmn-Ix__a0hN1dX5cZKBsezJYdtbbqnHLMWeaIvy/exec";
+
+const formData = new URLSearchParams();
+
+for (const key in payload) {
+    let value = payload[key];
+
+    // ถ้าเป็น Array ให้แปลงเป็นข้อความ
+    if (Array.isArray(value)) {
+        value = value.join("\n");
+    }
+
+    // ถ้าเป็น Object ให้แปลงเป็น JSON
+    else if (typeof value === "object" && value !== null) {
+        value = JSON.stringify(value);
+    }
+
+    formData.append(key, value ?? "");
+}
 
 fetch(scriptURL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-}).catch(err => console.error(err));
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+})
+.then(() => {
+    console.log("ส่งข้อมูลไป Google Sheets สำเร็จ");
+})
+.catch(error => {
+    console.error("ส่งข้อมูลไป Google Sheets ไม่สำเร็จ:", error);
+});
 
     const finalScores = calculateTraits();
     const traitMeta = [
