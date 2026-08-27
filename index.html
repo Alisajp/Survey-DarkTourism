@@ -3028,165 +3028,534 @@ function calculateTraits() {
     };
 }
 
-function determineCharacter(scores) {
-    const { history, empathy, curiosity, experience, reflection, memory } = scores;
+/* =========================================================
+   CHARACTER DESCRIPTION
+========================================================= */
 
-    let candidates = [
-        {
-            id: "witness",
-            th: "ผู้เฝ้ามองอดีต",
-            en: "THE WITNESS",
-            img: "witness.png",
-            score: history * 0.4 + reflection * 0.4 + curiosity * 0.2
-        },
-        {
-            id: "seeker",
-            th: "ผู้ตามหาร่องรอย",
-            en: "THE SEEKER",
-            img: "seeker.png",
-            score: curiosity * 0.5 + history * 0.3 + experience * 0.2
-        },
-        {
-            id: "empath",
-            th: "ผู้ร่วมรำลึก",
-            en: "THE EMPATH",
-            img: "Empath.png",
-            score: empathy * 0.5 + reflection * 0.3 + memory * 0.2
-        },
-        {
-            id: "adventurer",
-            th: "ผู้ท้าทายเส้นทาง",
-            en: "THE ADVENTURER",
-            img: "adventure.png",
-            score: experience * 0.5 + curiosity * 0.3 + history * 0.2
-        },
-        {
-            id: "reflector",
-            th: "ผู้ใคร่ครวญความทรงจำ",
-            en: "THE REFLECTOR",
-            img: "reflector.png",
-            score: reflection * 0.5 + history * 0.3 + empathy * 0.2
-        },
-        {
-            id: "memory-keeper",
-            th: "ผู้พิทักษ์ความทรงจำ",
-            en: "THE MEMORY KEEPER",
-            img: "memory.png",
-            score: memory * 0.5 + history * 0.3 + empathy * 0.2
+function showCharacterDescription(character, scores){
+
+    let description = "";
+
+
+    switch(character.id){
+
+        case "witness":
+
+            description =
+                "คุณเป็นผู้ที่ให้ความสำคัญกับเรื่องราวในอดีต " +
+                "มองการเดินทางเป็นพื้นที่สำหรับเรียนรู้ ทำความเข้าใจ " +
+                "และมองเห็นคุณค่าของเหตุการณ์ทางประวัติศาสตร์ผ่านสถานที่จริง";
+
+            break;
+
+
+        case "seeker":
+
+            description =
+                "คุณเป็นผู้แสวงหาร่องรอยของเรื่องราวในอดีต " +
+                "มีความอยากรู้อยากเห็นสูง และมักต้องการค้นคว้าข้อมูล " +
+                "เพื่อทำความเข้าใจสถานที่และเหตุการณ์ให้ลึกซึ้งยิ่งขึ้น";
+
+            break;
+
+
+        case "empath":
+
+            description =
+                "คุณเป็นผู้ที่รับรู้เรื่องราวผ่านความรู้สึก " +
+                "ให้ความสำคัญกับผู้คน ความสูญเสีย และความทรงจำ " +
+                "จึงมองการเดินทางในฐานะการทำความเข้าใจและร่วมรำลึก";
+
+            break;
+
+
+        case "adventurer":
+
+            description =
+                "คุณเป็นผู้เปิดรับประสบการณ์และพร้อมออกเดินทาง " +
+                "มีความสนใจที่จะสัมผัสสถานที่จริงด้วยตนเอง " +
+                "และเรียนรู้เรื่องราวผ่านประสบการณ์ตรง";
+
+            break;
+
+
+        case "reflector":
+
+            description =
+                "คุณเป็นผู้ใคร่ครวญและมองเหตุการณ์ในอดีตอย่างลึกซึ้ง " +
+                "สนใจความหมายของความทรงจำและบทเรียนจากประวัติศาสตร์ " +
+                "มากกว่าการเดินทางเพียงเพื่อการท่องเที่ยว";
+
+            break;
+
+
+        case "memory-keeper":
+
+            description =
+                "คุณเป็นผู้ให้คุณค่ากับความทรงจำและการอนุรักษ์เรื่องราวในอดีต " +
+                "เชื่อว่าสถานที่และเรื่องเล่าควรถูกจดจำอย่างเหมาะสม " +
+                "และถ่ายทอดด้วยความเคารพต่อผู้ที่ได้รับผลกระทบ";
+
+            break;
+
+
+        default:
+
+            description =
+                "คุณมีความสนใจหลากหลายด้านต่อเรื่องราวทางประวัติศาสตร์ " +
+                "และการท่องเที่ยวเชิงมืด";
+
+    }
+
+
+    let existing =
+        document.getElementById(
+            "characterDescription"
+        );
+
+
+    if(!existing){
+
+        existing =
+            document.createElement("div");
+
+        existing.id =
+            "characterDescription";
+
+        existing.className =
+            "character-description";
+
+
+        const resultBox =
+            document.getElementById(
+                "resultCharacterContainer"
+            );
+
+
+        if(resultBox){
+
+            resultBox.appendChild(
+                existing
+            );
+
         }
-    ];
 
-    candidates.sort((a, b) => b.score - a.score);
-    return candidates[0];
+    }
+
+
+    existing.innerHTML = `
+
+        <div class="character-description-title">
+
+            ลักษณะการเดินทางของคุณ
+
+        </div>
+
+        <div class="character-description-text">
+
+            ${description}
+
+        </div>
+
+    `;
+
 }
 
 function processSurveyCompletion() {
+/* =========================================================
+   SUBMIT SURVEY → GOOGLE SHEETS
+========================================================= */
+
+const scriptURL =
+"https://script.google.com/macros/s/AKfycbyFxE8JhZenyWH6vMA_HOukI9DpyRNnw3Q5_1XA4EMBZk9Oaw_Fn8I7NK5T9mdTmKsu/exec";
+
+
+function processSurveyCompletion() {
+
     playClick();
+
     showPage("processing");
 
-    document.getElementById("resultCharacterContainer").style.display = "none";
-    document.getElementById("processingTextContainer").style.display = "block";
-    document.getElementById("combinedThankyouContainer").style.display = "none";
+    const resultBox =
+        document.getElementById("resultCharacterContainer");
 
-    // จัดรูปแบงข้อมูลก่อนส่ง ให้แยกคะแนนพาร์ท Rating ออกเป็นรายข้ออิสระ
-    let payload = {};
-    for(let key in answers){
-        let val = answers[key];
-        if(typeof val === "object" && val !== null && !Array.isArray(val) && val.type !== "other"){
-            for(let subK in val){
-                payload[key + "_" + subK] = val[subK];
-            }
-        } else {
-            payload[key] = val;
-        }
+    const processingBox =
+        document.getElementById("processingTextContainer");
+
+    const thankyouBox =
+        document.getElementById("combinedThankyouContainer");
+
+    if(resultBox){
+        resultBox.style.display = "none";
     }
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbzkGCoX--tonX3NM8QeZK1NB--KTmn-Ix__a0hN1dX5cZKBsezJYdtbbqnHLMWeaIvy/exec";
-
-const formData = new URLSearchParams();
-
-for (const key in payload) {
-    let value = payload[key];
-
-    // ถ้าเป็น Array ให้แปลงเป็นข้อความ
-    if (Array.isArray(value)) {
-        value = value.join("\n");
+    if(processingBox){
+        processingBox.style.display = "block";
     }
 
-    // ถ้าเป็น Object ให้แปลงเป็น JSON
-    else if (typeof value === "object" && value !== null) {
-        value = JSON.stringify(value);
+    if(thankyouBox){
+        thankyouBox.style.display = "none";
     }
 
-    formData.append(key, value ?? "");
-}
 
-fetch(scriptURL, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-})
-.then(() => {
-    console.log("ส่งข้อมูลไป Google Sheets สำเร็จ");
-})
-.catch(error => {
-    console.error("ส่งข้อมูลไป Google Sheets ไม่สำเร็จ:", error);
-});
+    /* =====================================================
+       1. คำนวณคะแนน
+    ===================================================== */
 
     const finalScores = calculateTraits();
+
+
+    /* =====================================================
+       2. แสดงคะแนนแบบ Real-time
+    ===================================================== */
+
     const traitMeta = [
-        { name: "ความสนใจเชิงประวัติศาสตร์", target: finalScores.history },
-        { name: "ความเห็นอกเห็นใจ", target: finalScores.empathy },
-        { name: "ความใฝ่รู้", target: finalScores.curiosity },
-        { name: "การแสวงหาประสบการณ์", target: finalScores.experience },
-        { name: "การใคร่ครวญ", target: finalScores.reflection },
-        { name: "การอนุรักษ์ความทรงจำ", target: finalScores.memory }
+
+        {
+            key: "history",
+            name: "ความสนใจเชิงประวัติศาสตร์",
+            target: finalScores.history
+        },
+
+        {
+            key: "empathy",
+            name: "ความเห็นอกเห็นใจ",
+            target: finalScores.empathy
+        },
+
+        {
+            key: "curiosity",
+            name: "ความใฝ่รู้",
+            target: finalScores.curiosity
+        },
+
+        {
+            key: "experience",
+            name: "การแสวงหาประสบการณ์",
+            target: finalScores.experience
+        },
+
+        {
+            key: "reflection",
+            name: "การใคร่ครวญ",
+            target: finalScores.reflection
+        },
+
+        {
+            key: "memory",
+            name: "การอนุรักษ์ความทรงจำ",
+            target: finalScores.memory
+        }
+
     ];
 
-    const container = document.getElementById("traitScoresContainer");
-    container.innerHTML = "";
 
-    traitMeta.forEach((item, idx) => {
-        const div = document.createElement("div");
-        div.className = "trait-score-item";
-        div.innerHTML = `
-            <div class="trait-info">
-                <span>${item.name}</span>
-                <span id="traitVal_${idx}">0%</span>
-            </div>
-            <div class="trait-bar-bg">
-                <div class="trait-bar-fill" id="traitBar_${idx}"></div>
-            </div>
-        `;
-        container.appendChild(div);
-    });
+    const container =
+        document.getElementById("traitScoresContainer");
 
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 2;
-        if (progress > 100) progress = 100;
 
-        traitMeta.forEach((item, idx) => {
-            let currentVal = Math.round((progress / 100) * item.target);
-            document.getElementById(`traitVal_${idx}`).textContent = currentVal + "%";
-            document.getElementById(`traitBar_${idx}`).style.width = currentVal + "%";
+    if(container){
+
+        container.innerHTML = "";
+
+
+        traitMeta.forEach(function(item, index){
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "trait-score-item";
+
+
+            div.innerHTML = `
+
+                <div class="trait-info">
+
+                    <span>
+                        ${item.name}
+                    </span>
+
+                    <strong
+                        id="traitVal_${index}">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div class="trait-bar-bg">
+
+                    <div
+                        class="trait-bar-fill"
+                        id="traitBar_${index}">
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(div);
+
         });
 
-        if (progress >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-                document.getElementById("processingTextContainer").style.display = "none";
+    }
 
-                const matchedChar = determineCharacter(finalScores);
-                document.getElementById("revealCharacterImg").src = matchedChar.img;
-                document.getElementById("revealCharacterTh").textContent = matchedChar.th;
-                document.getElementById("revealCharacterEn").textContent = matchedChar.en;
-                document.getElementById("resultCharacterContainer").style.display = "block";
 
-                document.getElementById("combinedThankyouContainer").style.display = "block";
-            }, 600);
+    /* =====================================================
+       3. ส่งข้อมูลไป Google Sheets
+       
+       ส่ง JSON โดยตรง
+       Apps Script ตัวใหม่รองรับแล้ว
+    ===================================================== */
+
+    const payload = {};
+
+
+    Object.keys(answers).forEach(function(key){
+
+        const value = answers[key];
+
+
+        /*
+         * Rating
+         *
+         * q_16
+         * q_17
+         * q_18
+         * q_19
+         *
+         * ส่งเป็น object เดิม
+         */
+
+        if(
+            value !== null &&
+            typeof value === "object" &&
+            !Array.isArray(value) &&
+            value.type !== "other"
+        ){
+
+            payload[key] = {};
+
+            Object.keys(value).forEach(function(subKey){
+
+                payload[key][subKey] =
+                    value[subKey];
+
+            });
+
         }
-    }, 35);
+
+        else {
+
+            payload[key] = value;
+
+        }
+
+    });
+
+
+    /*
+     * ส่งข้อมูล
+     */
+
+    fetch(scriptURL, {
+
+        method: "POST",
+
+        mode: "no-cors",
+
+        headers: {
+            "Content-Type":
+                "application/json"
+        },
+
+        body:
+            JSON.stringify(payload)
+
+    })
+    .then(function(){
+
+        console.log(
+            "THE DARK JOURNEY: ส่งข้อมูลสำเร็จ"
+        );
+
+    })
+    .catch(function(error){
+
+        console.error(
+            "THE DARK JOURNEY: ส่งข้อมูลไม่สำเร็จ",
+            error
+        );
+
+    });
+
+
+    /* =====================================================
+       4. Animation คะแนนวิ่ง
+    ===================================================== */
+
+    let progress = 0;
+
+
+    const interval =
+        setInterval(function(){
+
+            progress += 2;
+
+
+            if(progress > 100){
+
+                progress = 100;
+
+            }
+
+
+            traitMeta.forEach(function(item,index){
+
+                const currentVal =
+                    Math.round(
+                        (progress / 100) *
+                        item.target
+                    );
+
+
+                const valueEl =
+                    document.getElementById(
+                        `traitVal_${index}`
+                    );
+
+
+                const barEl =
+                    document.getElementById(
+                        `traitBar_${index}`
+                    );
+
+
+                if(valueEl){
+
+                    valueEl.textContent =
+                        currentVal + "%";
+
+                }
+
+
+                if(barEl){
+
+                    barEl.style.width =
+                        currentVal + "%";
+
+                }
+
+            });
+
+
+            if(progress >= 100){
+
+                clearInterval(interval);
+
+
+                setTimeout(function(){
+
+                    /*
+                     * หยุดข้อความประมวลผล
+                     */
+
+                    if(processingBox){
+
+                        processingBox.style.display =
+                            "none";
+
+                    }
+
+
+                    /* =================================
+                       จับคู่คาแรกเตอร์
+                    ================================= */
+
+                    const matchedChar =
+                        determineCharacter(
+                            finalScores
+                        );
+
+
+                    if(resultBox){
+
+                        resultBox.style.display =
+                            "block";
+
+                    }
+
+
+                    const image =
+                        document.getElementById(
+                            "revealCharacterImg"
+                        );
+
+
+                    const th =
+                        document.getElementById(
+                            "revealCharacterTh"
+                        );
+
+
+                    const en =
+                        document.getElementById(
+                            "revealCharacterEn"
+                        );
+
+
+                    if(image){
+
+                        image.src =
+                            matchedChar.img;
+
+                    }
+
+
+                    if(th){
+
+                        th.textContent =
+                            matchedChar.th;
+
+                    }
+
+
+                    if(en){
+
+                        en.textContent =
+                            matchedChar.en;
+
+                    }
+
+
+                    /* =================================
+                       คำบรรยายบุคลิก
+                    ================================= */
+
+                    showCharacterDescription(
+                        matchedChar,
+                        finalScores
+                    );
+
+
+                    /* =================================
+                       ขอบคุณ
+                    ================================= */
+
+                    if(thankyouBox){
+
+                        thankyouBox.style.display =
+                            "block";
+
+                    }
+
+                },600);
+
+            }
+
+        },35);
+
 }
 
 document.getElementById("restartButton").addEventListener("click", ()=>{
