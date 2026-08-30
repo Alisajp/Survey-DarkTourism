@@ -2280,10 +2280,14 @@ const questions = [
     headerTitle:"PART I",
     mainTitle:{ TH: "ข้อมูลทั่วไป (ต่อ)", EN: "General Information (Cont.)" },
     question:{ TH: "5. รายได้เฉลี่ยต่อเดือน", EN: "5. Average Monthly Income" },
+    note:{ 
+        TH: "(หน่วยเงิน: บาท)", 
+        EN: "(*THB = Thai Baht. For reference: 15,000 THB is approx. 450 USD / 420 EUR)" 
+    },
     type:"choice",
     options:{
         TH: ["ต่ำกว่า 15,000 บาท", "15,001–30,000 บาท", "30,001–50,000 บาท", "มากกว่า 50,001 บาท"],
-        EN: ["Below 15,000 THB", "15,001–30,000 THB", "30,001–50,000 THB", "Above 50,001 THB"]
+        EN: ["Under 15,000 THB", "15,001–30,000 THB", "30,001–50,000 THB", "50,001+ THB"]
     }
 },
 {
