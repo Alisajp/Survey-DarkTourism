@@ -2804,6 +2804,13 @@ function renderChoice(q,index){
     title.textContent = q.question[currentLang];
     item.appendChild(title);
 
+    if(q.note){
+        const noteEl = document.createElement("div");
+        noteEl.className = "question-note";
+        noteEl.textContent = q.note[currentLang];
+        item.appendChild(noteEl);
+    }
+    
     const answersBox = document.createElement("div");
     answersBox.className = "answers";
 
