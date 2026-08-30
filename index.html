@@ -191,15 +191,20 @@ button{
 }
 
 /* =========================================================
-    SOUND BUTTON
+    SOUND BUTTON & LANG BUTTON GROUP
 ========================================================= */
 
-.sound-button{
+.top-controls {
     position:fixed;
     top:18px;
     right:18px;
     z-index:5000;
+    display:flex;
+    gap:10px;
+}
 
+.sound-button,
+.lang-button{
     width:44px;
     height:44px;
 
@@ -216,6 +221,9 @@ button{
 
     backdrop-filter:blur(8px);
     transition:.25s;
+    font-family:"Noto Serif Thai", serif;
+    font-size:13px;
+    font-weight:600;
 }
 
 .sound-button svg {
@@ -224,12 +232,14 @@ button{
     fill: #fff;
 }
 
-.sound-button:hover{
+.sound-button:hover,
+.lang-button:hover{
     transform:scale(1.08);
     border-color:#e7c98c;
 }
 
-.sound-button:active{
+.sound-button:active,
+.lang-button:active{
     transform:scale(.88);
 }
 
@@ -1509,6 +1519,22 @@ button{
     margin: 0 0 14px 0;
 }
 
+.character-description-title{
+    font-family: "Cormorant Garamond", serif;
+    font-size: 14px;
+    color: #d8bb86;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.character-description-text{
+    font-size: 12.5px;
+    color: #e8dcc7;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    padding: 0 10px;
+}
+
 .combined-thankyou-box {
     margin-top: 10px;
     padding-top: 8px;
@@ -1618,15 +1644,33 @@ button{
        preload="auto">
 </audio>
 
-<button
-    type="button"
-    class="sound-button"
-    id="soundButton"
-    title="เปิด/ปิดเสียง">
-    <svg id="soundIcon" viewBox="0 0 24 24">
-        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-    </svg>
-</button>
+<div class="top-controls">
+    <button type="button" class="lang-button" id="langSwitchButton">EN</button>
+    <button
+        type="button"
+        class="sound-button"
+        id="soundButton"
+        title="เปิด/ปิดเสียง">
+        <svg id="soundIcon" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+    </button>
+</div>
+
+<!-- ======================================================
+    INITIAL LANGUAGE SELECTION POPUP
+====================================================== -->
+<div class="popup-layer active" id="langSelectPopup">
+    <div class="info-paper" style="text-align:center;">
+        <div class="paper-label">LANGUAGE SELECTION</div>
+        <h2 class="paper-title">กรุณาเลือกภาษา / Please Select Language</h2>
+        <div class="gold-line"></div>
+        <div style="display:flex; gap:15px; margin-top:25px;">
+            <button type="button" class="paper-button" id="btnThai" style="margin:0; flex:1; font-size:16px;">THAI</button>
+            <button type="button" class="paper-button" id="btnEng" style="margin:0; flex:1; font-size:16px;">ENGLISH</button>
+        </div>
+    </div>
+</div>
 
 <!-- ======================================================
     COVER
@@ -1649,7 +1693,7 @@ button{
 
     <div class="cover-header">
 
-        <div class="subtitle">
+        <div class="subtitle" data-i18n="cover_sub">
             RESEARCH SURVEY
         </div>
 
@@ -1658,7 +1702,7 @@ button{
             JOURNEY
         </h1>
 
-        <div class="cover-thai">
+        <div class="cover-thai" data-i18n="cover_desc">
             อดีตทิ้งร่องรอยไว้เสมอ
             <br>แต่สิ่งที่เราตามหา
             <br>คืออะไรที่ทำให้คุณอยากเดินทางไปพบมัน
@@ -1673,7 +1717,7 @@ button{
             class="start-button"
             id="startButton">
 
-            เริ่มต้นการเดินทาง
+            <span data-i18n="cover_start">เริ่มต้นการเดินทาง</span>
             <span>➜</span>
 
         </button>
@@ -1701,17 +1745,17 @@ button{
 
     <div class="intro-content">
 
-        <div class="label">
+        <div class="label" data-i18n="intro_label">
             BEFORE THE JOURNEY
         </div>
 
-        <h2 class="content-title">
+        <h2 class="content-title" data-i18n="intro_title">
             ก่อนออกเดินทาง
         </h2>
 
         <div class="gold-line"></div>
 
-        <div class="description">
+        <div class="description" data-i18n="intro_desc">
 
             การศึกษาครั้งนี้มุ่งศึกษาพฤติกรรม
             การรับรู้ ความคิดเห็น และปัจจัยที่เกี่ยวข้องกับ
@@ -1725,7 +1769,7 @@ button{
 
         </div>
 
-        <div class="warning">
+        <div class="warning" data-i18n="intro_warning">
 
             ✦ ไม่มีคำตอบที่ถูกหรือผิด
             <br>
@@ -1738,7 +1782,7 @@ button{
             class="primary-button"
             id="openInfoButton">
 
-            อ่านคำชี้แจงการวิจัย ➜
+            <span data-i18n="intro_btn">อ่านคำชี้แจงการวิจัย</span> ➜
 
         </button>
 
@@ -1760,13 +1804,13 @@ button{
             RESEARCH INFORMATION
         </div>
 
-        <h2 class="paper-title">
+        <h2 class="paper-title" data-i18n="res_title">
             คำชี้แจงสำหรับผู้ตอบแบบสอบถาม
         </h2>
 
         <div class="gold-line"></div>
 
-        <div class="paper-text">
+        <div class="paper-text" data-i18n="res_text">
 
             แบบสอบถามฉบับนี้จัดทำขึ้นเพื่อเป็นเครื่องมือสำหรับเก็บรวบรวมข้อมูลประกอบการศึกษาวิจัย <br>
             <strong>เรื่อง “ปัจจัยที่มีอิทธิพลต่อความตั้งใจเดินทางท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย”</strong><br>
@@ -1786,7 +1830,7 @@ button{
 
         </div>
 
-        <div class="paper-signature">
+        <div class="paper-signature" data-i18n="res_sig">
 
             <br>
             กิติกร บุพศิริ · อลิสา จิรโพธิธาดา 
@@ -1801,7 +1845,7 @@ button{
         <button
             type="button"
             class="paper-button"
-            id="acceptResearchButton">
+            id="acceptResearchButton" data-i18n="res_btn">
 
             รับทราบและเข้าสู่แบบสอบถาม
 
@@ -1825,14 +1869,14 @@ button{
             PARTICIPANT ELIGIBILITY
         </div>
 
-        <h2 class="paper-title">
+        <h2 class="paper-title" data-i18n="age_title">
             ข้อกำหนดสำหรับผู้ตอบแบบสอบถาม
         </h2>
 
         <div class="gold-line"></div>
 
         <div class="paper-text"
-             style="text-align:center;">
+             style="text-align:center;" data-i18n="age_text">
 
             แบบสอบถามนี้กำหนดกลุ่มผู้ตอบแบบสอบถาม
             <strong>
@@ -1856,7 +1900,7 @@ button{
                 type="button"
                 class="paper-button"
                 id="ageNoButton"
-                style="margin:0;flex:1;">
+                style="margin:0;flex:1;" data-i18n="age_no">
 
                 ไม่ใช่
 
@@ -1866,7 +1910,7 @@ button{
                 type="button"
                 class="paper-button"
                 id="ageYesButton"
-                style="margin:0;flex:1;">
+                style="margin:0;flex:1;" data-i18n="age_yes">
 
                 ใช่ ฉันอายุ 18 ปีขึ้นไป
 
@@ -1901,7 +1945,7 @@ button{
 
             <span>
 
-                หน้า
+                <span data-i18n="survey_page">หน้า</span>
                 <span id="pageNumber">
                     1
                 </span>
@@ -1939,7 +1983,7 @@ button{
 
         </div>
 
-        <div class="global-warning-banner" id="globalWarningBanner">
+        <div class="global-warning-banner" id="globalWarningBanner" data-i18n="warn_incomplete">
             ⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน
         </div>
 
@@ -1953,7 +1997,7 @@ button{
             <button
                 type="button"
                 class="nav-button"
-                id="backButton">
+                id="backButton" data-i18n="nav_back">
 
                 ← ย้อนกลับ
 
@@ -1962,7 +2006,7 @@ button{
             <button
                 type="button"
                 class="nav-button"
-                id="nextButton">
+                id="nextButton" data-i18n="nav_next">
 
                 ถัดไป →
 
@@ -1988,9 +2032,10 @@ button{
             A NEW CHAPTER
         </div>
 
-        <h2>การท่องเที่ยวเชิงมืดคืออะไร?</h2>
+        <h2 data-i18n="dt_title">การท่องเที่ยวเชิงมืดคืออะไร?</h2>
 <div class="gold-line"></div>
 
+<div data-i18n="dt_content">
 <p>
   การท่องเที่ยวเชิงมืด (Dark Tourism) คือ การเดินทางไปยังสถานที่ที่มีความเกี่ยวข้องกับ ความตาย โศกนาฏกรรม ความขัดแย้ง สงคราม ภัยพิบัติ หรือเหตุการณ์สูญเสียในอดีต เพื่อเรียนรู้ ทำความเข้าใจ
 </p>
@@ -2015,11 +2060,12 @@ button{
   <li><strong>เมืองโบราณปอมเปอี ประเทศอิตาลี:</strong> ซากเมืองโรมันโบราณที่ถูกฝังใต้เถ้าถ่านภูเขาไฟระเบิด</li>
   <li><strong>อนุสรณ์สถาน 9/11 กราวด์ซีโร่ สหรัฐอเมริกา:</strong> จุดเกิดเหตุวินาศกรรมตึกเวิลด์เทรดเซ็นเตอร์</li>
 </ul>
+</div>
 
         <button
             type="button"
             class="paper-button"
-            id="continueDarkButton">
+            id="continueDarkButton" data-i18n="dt_btn">
 
             เปิดบทต่อไป ➜
 
@@ -2044,18 +2090,18 @@ button{
         </div>
 
         <div id="processingTextContainer">
-            <div class="processing-title">กำลังวิเคราะห์การเดินทางของคุณ...</div>
-            <div class="processing-sub">ระบบกำลังประมวลผลคำตอบของคุณ</div>
+            <div class="processing-title" data-i18n="proc_title">กำลังวิเคราะห์การเดินทางของคุณ...</div>
+            <div class="processing-sub" data-i18n="proc_sub">ระบบกำลังประมวลผลคำตอบของคุณ</div>
         </div>
 
         <div id="traitScoresContainer"></div>
 
         <div id="combinedThankyouContainer" class="combined-thankyou-box" style="display:none;">
-            <div class="combined-thankyou-title">ขอบคุณสำหรับการเดินทางครั้งนี้</div>
-            <div class="combined-thankyou-desc">
+            <div class="combined-thankyou-title" data-i18n="thx_title">ขอบคุณสำหรับการเดินทางครั้งนี้</div>
+            <div class="combined-thankyou-desc" data-i18n="thx_desc">
                 ทุกคำตอบของคุณมีส่วนช่วยในการศึกษาการท่องเที่ยวเชิงมืดในพื้นที่สงครามในประเทศไทย
             </div>
-            <button type="button" class="primary-button" id="restartButton" style="max-width:170px;margin:5px auto 0 auto;padding:7px 12px;font-size:11.5px;">
+            <button type="button" class="primary-button" id="restartButton" style="max-width:170px;margin:5px auto 0 auto;padding:7px 12px;font-size:11.5px;" data-i18n="restart_btn">
                 เริ่มต้นการเดินทางอีกครั้ง
             </button>
         </div>
@@ -2067,7 +2113,117 @@ button{
 <script>
 
 /* =========================================================
-    QUESTIONS DATA
+    DICTIONARY & I18N DATA (TH / EN)
+========================================================= */
+let currentLang = "TH";
+
+const dict = {
+    TH: {
+        cover_sub: "RESEARCH SURVEY",
+        cover_desc: "อดีตทิ้งร่องรอยไว้เสมอ<br>แต่สิ่งที่เราตามหา<br>คืออะไรที่ทำให้คุณอยากเดินทางไปพบมัน",
+        cover_start: "เริ่มต้นการเดินทาง",
+        intro_label: "BEFORE THE JOURNEY",
+        intro_title: "ก่อนออกเดินทาง",
+        intro_desc: "การศึกษาครั้งนี้มุ่งศึกษาพฤติกรรม การรับรู้ ความคิดเห็น และปัจจัยที่เกี่ยวข้องกับความสนใจในการท่องเที่ยวเชิงมืด ในพื้นที่สงครามในประเทศไทย<br><br>โปรดตอบคำถามจากความคิดเห็น ความรู้สึก และประสบการณ์ของท่านตามความเป็นจริง",
+        intro_warning: "✦ ไม่มีคำตอบที่ถูกหรือผิด <br> ทุกคำตอบมีคุณค่าต่อการศึกษาครั้งนี้ ✦",
+        intro_btn: "อ่านคำชี้แจงการวิจัย",
+        res_title: "คำชี้แจงสำหรับผู้ตอบแบบสอบถาม",
+        res_text: "แบบสอบถามฉบับนี้จัดทำขึ้นเพื่อเป็นเครื่องมือสำหรับเก็บรวบรวมข้อมูลประกอบการศึกษาวิจัย <br><strong>เรื่อง “ปัจจัยที่มีอิทธิพลต่อความตั้งใจเดินทางท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย”</strong><br><em>(Factors Influencing the Intention to Visit War-Zone Dark Tourism Sites in Thailand)</em><br><br>การวิจัยมีวัตถุประสงค์เพื่อศึกษาพฤติกรรม การรับรู้ แรงจูงใจ ความเข้าใจประวัติศาสตร์ อิทธิพลของสื่อสังคมและสื่อออนไลน์ ความอยากรู้อยากเห็น และความตั้งใจในการเดินทางของบุคคลทั่วไปที่มีความสนใจต่อแหล่งท่องเที่ยวที่เกี่ยวข้องกับสงคราม ความสูญเสีย และเหตุการณ์สำคัญทางประวัติศาสตร์<br><br>ข้อมูลที่ได้รับจะนำไปใช้เพื่อการศึกษาและวิเคราะห์ในภาพรวม โดยจะไม่นำเสนอข้อมูลในลักษณะที่สามารถระบุตัวตนของผู้ตอบแบบสอบถามได้ โปรดตอบคำถามตามความคิดเห็นและประสบการณ์ของท่านอย่างตรงไปตรงมา การตอบแบบสอบถามใช้เวลาเพียงไม่กี่นาที<br><br><strong>ผู้ตอบแบบสอบถามต้องมีอายุ 18 ปีขึ้นไป</strong>",
+        res_sig: "<br>กิติกร บุพศิริ · อลิสา จิรโพธิธาดา <br>พุฒิพงศ์ ศรีรักษ์ · พรนภัส ไทยประสงค์<br>สาขาสตาร์ทอัพการท่องเที่ยวและการบริการ <br>คณะบริหารธุรกิจและเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น พ.ศ. 2569",
+        res_btn: "รับทราบและเข้าสู่แบบสอบถาม",
+        age_title: "ข้อกำหนดสำหรับผู้ตอบแบบสอบถาม",
+        age_text: "แบบสอบถามนี้กำหนดกลุ่มผู้ตอบแบบสอบถาม <strong>อายุ 18 ปีขึ้นไป</strong><br><br>กรุณายืนยันว่าท่านมีคุณสมบัติตามเกณฑ์ก่อนเข้าสู่ขั้นตอนการตอบแบบสอบถาม",
+        age_no: "ไม่ใช่",
+        age_yes: "ใช่ ฉันอายุ 18 ปีขึ้นไป",
+        survey_page: "หน้า",
+        warn_incomplete: "⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน",
+        nav_back: "← ย้อนกลับ",
+        nav_next: "ถัดไป →",
+        nav_submit: "ส่งคำตอบ ✦",
+        dt_title: "การท่องเที่ยวเชิงมืดคืออะไร?",
+        dt_content: `
+            <p>การท่องเที่ยวเชิงมืด (Dark Tourism) คือ การเดินทางไปยังสถานที่ที่มีความเกี่ยวข้องกับ ความตาย โศกนาฏกรรม ความขัดแย้ง สงคราม ภัยพิบัติ หรือเหตุการณ์สูญเสียในอดีต เพื่อเรียนรู้ ทำความเข้าใจ</p>
+            <p>การเดินทางลักษณะนี้ไม่ได้มุ่งหมายเพียงการไปเยือนสถานที่แห่งความสูญเสีย แต่ยังเปิดโอกาสให้ผู้เดินทางได้ เรียนรู้จากอดีต มองเห็นผลกระทบของเหตุการณ์ และสะท้อนความคิดต่อคุณค่าของชีวิตและสังคม แต่พาเราไปพบ “เรื่องราวที่ไม่ควรลืม”</p>
+            <p><strong>ตัวอย่างสถานที่ในประเทศไทย:</strong></p>
+            <ul>
+              <li><strong>พิพิธภัณฑ์ช่องเขาขาดและสะพานข้ามแม่น้ำแคว จ.กาญจนบุรี:</strong> เส้นทางเชลยศึกและทางรถไฟสายมรณะในสงครามโลกครั้งที่ 2</li>
+              <li><strong>อุทยานประวัติศาสตร์สงคราม 9 ทัพ จ.กาญจนบุรี:</strong> พื้นที่สนามรบประวัติศาสตร์สมัยรัชกาลที่ 1</li>
+              <li><strong>พิพิธภัณฑ์ประวัติศาสตร์การสู้รบ (เขาค้อ) จ.เพชรบูรณ์:</strong> ยุทธภูมิรบอันดุเดือดในยุคสงครามเย็น ระหว่างกองทัพไทยกับผู้ก่อการร้ายคอมมิวนิสต์</li>
+              <li><strong>อนุสรณ์สถานค่ายบางระจัน จ.สิงห์บุรี:</strong> สถานที่รำลึกความเสียสละของชาวบ้านในสงครามโบราณ</li>
+              <li><strong>อนุสาวรีย์ทหารอาสา กรุงเทพฯ:</strong> อนุสรณ์สถานบรรจุอัฐิของทหารไทยที่เสียชีวิตในสงครามโลกครั้งที่ 1</li>
+            </ul>
+            <p><strong>ตัวอย่างสถานที่ในต่างประเทศ:</strong></p>
+            <ul>
+              <li><strong>ค่ายกักกันเอาช์วิทซ์ ประเทศโปแลนด์:</strong> สถานที่ฆ่าล้างเผ่าพันธุ์ชาวยิวในสงครามโลกครั้งที่ 2</li>
+              <li><strong>พิพิธภัณฑ์สันติภาพฮิโรชิมา ประเทศญี่ปุ่น:</strong> อนุสรณ์สถานรำลึกผลกระทบจากระเบิดปรมาณู</li>
+              <li><strong>ทุ่งสังหาร (Choeung Ek) ประเทศกัมพูชา:</strong> พื้นที่ประวัติศาสตร์ความรุนแรงและการสังหารหมู่ยุคเขมรแดง</li>
+              <li><strong>เมืองโบราณปอมเปอี ประเทศอิตาลี:</strong> ซากเมืองโรมันโบราณที่ถูกฝังใต้เถ้าถ่านภูเขาไฟระเบิด</li>
+              <li><strong>อนุสรณ์สถาน 9/11 กราวด์ซีโร่ สหรัฐอเมริกา:</strong> จุดเกิดเหตุวินาศกรรมตึกเวิลด์เทรดเซ็นเตอร์</li>
+            </ul>
+        `,
+        dt_btn: "เปิดบทต่อไป ➜",
+        proc_title: "กำลังวิเคราะห์การเดินทางของคุณ...",
+        proc_sub: "ระบบกำลังประมวลผลคำตอบของคุณ",
+        thx_title: "ขอบคุณสำหรับการเดินทางครั้งนี้",
+        thx_desc: "ทุกคำตอบของคุณมีส่วนช่วยในการศึกษาการท่องเที่ยวเชิงมืดในพื้นที่สงครามในประเทศไทย",
+        restart_btn: "เริ่มต้นการเดินทางอีกครั้ง",
+        scale_labels: ["มากที่สุด", "มาก", "ปานกลาง", "น้อย", "น้อยที่สุด"]
+    },
+    EN: {
+        cover_sub: "RESEARCH SURVEY",
+        cover_desc: "The past always leaves traces.<br>But what we seek is<br>what drives you to discover it.",
+        cover_start: "START JOURNEY",
+        intro_label: "BEFORE THE JOURNEY",
+        intro_title: "Before Setting Out",
+        intro_desc: "This study aims to examine behavior, perception, opinions, and factors related to interest in dark tourism within war-zone areas in Thailand.<br><br>Please answer all questions honestly based on your true opinions, feelings, and experiences.",
+        intro_warning: "✦ There are no right or wrong answers.<br>Every response is valuable to this study. ✦",
+        intro_btn: "Read Research Information",
+        res_title: "Information for Participants",
+        res_text: "This questionnaire is designed to collect data for the research project <br><strong>“Factors Influencing the Intention to Visit War-Zone Dark Tourism Sites in Thailand.”</strong><br><em>(Factors Influencing the Intention to Visit War-Zone Dark Tourism Sites in Thailand)</em><br><br>The objective is to study behaviors, perceptions, motivations, historical understanding, social media influence, curiosity, and travel intentions of individuals interested in sites related to war, loss, and historical events.<br><br>Data will be analyzed and presented only in aggregate form without identifying individuals. Please answer honestly. It will take only a few minutes.<br><br><strong>Participants must be 18 years of age or older.</strong>",
+        res_sig: "<br>Kittikorn Bupsiri · Alisa Chirapothithada <br>Phuttipong Srirak · Pornnaphat Thaiprasong<br>Tourism and Service Startups Program<br>Faculty of Business Administration and Information Technology<br>Rajamangala University of Technology Isan, Khon Kaen Campus, 2026",
+        res_btn: "I Understand and Proceed",
+        age_title: "Participant Eligibility",
+        age_text: "This survey is intended for participants <strong>aged 18 years and above</strong>.<br><br>Please confirm your eligibility before entering the survey.",
+        age_no: "No",
+        age_yes: "Yes, I am 18 or older",
+        survey_page: "Page",
+        warn_incomplete: "⚠ Please complete all pending questions.",
+        nav_back: "← Back",
+        nav_next: "Next →",
+        nav_submit: "Submit ✦",
+        dt_title: "What is Dark Tourism?",
+        dt_content: `
+            <p>Dark Tourism involves traveling to sites associated with death, tragedy, conflict, war, disasters, or past loss to learn and understand.</p>
+            <p>This type of journey does not merely seek out sites of loss, but allows travelers to learn from the past, understand consequences, and reflect on the value of life and society.</p>
+            <p><strong>Example Sites in Thailand:</strong></p>
+            <ul>
+              <li><strong>Hellfire Pass Museum & Death Railway, Kanchanaburi:</strong> WWII POW labor route.</li>
+              <li><strong>Nine Armies Battle Historical Park, Kanchanaburi:</strong> Rama I historical battlefield.</li>
+              <li><strong>Khao Kho War History Museum, Phetchabun:</strong> Cold War battleground.</li>
+              <li><strong>Bang Rajan Camp Monument, Sing Buri:</strong> Memorial of local villagers' sacrifice.</li>
+              <li><strong>Volunteer Soldiers Monument, Bangkok:</strong> Memorial for WWI Thai soldiers.</li>
+            </ul>
+            <p><strong>Example International Sites:</strong></p>
+            <ul>
+              <li><strong>Auschwitz Concentration Camp, Poland:</strong> WWII Holocaust memorial site.</li>
+              <li><strong>Hiroshima Peace Memorial Museum, Japan:</strong> Atomic bomb memorial.</li>
+              <li><strong>Choeung Ek Killing Fields, Cambodia:</strong> Khmer Rouge historical site.</li>
+              <li><strong>Pompeii, Italy:</strong> Ancient Roman ruins buried by volcanic ash.</li>
+              <li><strong>9/11 Memorial & Ground Zero, USA:</strong> World Trade Center terrorist attack site.</li>
+            </ul>
+        `,
+        dt_btn: "Open Next Chapter ➜",
+        proc_title: "Analyzing your journey...",
+        proc_sub: "Processing your responses",
+        thx_title: "Thank You for This Journey",
+        thx_desc: "Every response contributes to the study of dark tourism in Thailand's war zones.",
+        restart_btn: "Start Journey Again",
+        scale_labels: ["Highest", "High", "Moderate", "Low", "Lowest"]
+    }
+};
+
+/* =========================================================
+    QUESTIONS DATA (Original Thai + English Translations)
 ========================================================= */
 
 const questions = [
@@ -2076,248 +2232,332 @@ const questions = [
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป",
-    question:"1. เพศ",
+    mainTitle:{ TH: "ข้อมูลทั่วไป", EN: "General Information" },
+    question:{ TH: "1. เพศ", EN: "1. Gender" },
     type:"choice",
-    options:["ชาย", "หญิง", "LGBTQ+", "ไม่ประสงค์ระบุ"]
+    options:{
+        TH: ["ชาย", "หญิง", "LGBTQ+", "ไม่ประสงค์ระบุ"],
+        EN: ["Male", "Female", "LGBTQ+", "Prefer not to say"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป",
-    question:"2. อายุ",
+    mainTitle:{ TH: "ข้อมูลทั่วไป", EN: "General Information" },
+    question:{ TH: "2. อายุ", EN: "2. Age" },
     type:"choice",
-    options:["18–25 ปี", "26–35 ปี", "36–45 ปี", "46–55 ปี", "56 ปีขึ้นไป"]
+    options:{
+        TH: ["18–25 ปี", "26–35 ปี", "36–45 ปี", "46–55 ปี", "56 ปีขึ้นไป"],
+        EN: ["18–25 years", "26–35 years", "36–45 years", "46–55 years", "56+ years"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป",
-    question:"3. ระดับการศึกษา",
+    mainTitle:{ TH: "ข้อมูลทั่วไป", EN: "General Information" },
+    question:{ TH: "3. ระดับการศึกษา", EN: "3. Education Level" },
     type:"choice",
-    options:["ต่ำกว่าปริญญาตรี", "ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก", "อื่น ๆ"]
+    options:{
+        TH: ["ต่ำกว่าปริญญาตรี", "ปริญญาตรี", "ปริญญาโท", "ปริญญาเอก", "อื่น ๆ"],
+        EN: ["Below Bachelor's", "Bachelor's Degree", "Master's Degree", "Doctorate", "Other"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป",
-    question:"4. อาชีพ",
+    mainTitle:{ TH: "ข้อมูลทั่วไป", EN: "General Information" },
+    question:{ TH: "4. อาชีพ", EN: "4. Occupation" },
     type:"choice",
-    options:["นักเรียน/นักศึกษา", "ข้าราชการ/รัฐวิสาหกิจ", "พนักงานบริษัทเอกชน", "ธุรกิจส่วนตัว/เจ้าของธุรกิจ", "ว่างงาน", "อื่น ๆ"]
+    options:{
+        TH: ["นักเรียน/นักศึกษา", "ข้าราชการ/รัฐวิสาหกิจ", "พนักงานบริษัทเอกชน", "ธุรกิจส่วนตัว/เจ้าของธุรกิจ", "ว่างงาน", "อื่น ๆ"],
+        EN: ["Student", "Government/State Enterprise", "Private Company Employee", "Business Owner / Self-Employed", "Unemployed", "Other"]
+    }
 },
 
 /* ================= PART 1 (Page 1) ================= */
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
-    question:"5. รายได้เฉลี่ยต่อเดือน",
+    mainTitle:{ TH: "ข้อมูลทั่วไป (ต่อ)", EN: "General Information (Cont.)" },
+    question:{ TH: "5. รายได้เฉลี่ยต่อเดือน", EN: "5. Average Monthly Income" },
     type:"choice",
-    options:["ต่ำกว่า 15,000 บาท", "15,001–30,000 บาท", "30,001–50,000 บาท", "มากกว่า 50,001 บาท"]
+    options:{
+        TH: ["ต่ำกว่า 15,000 บาท", "15,001–30,000 บาท", "30,001–50,000 บาท", "มากกว่า 50,001 บาท"],
+        EN: ["Below 15,000 THB", "15,001–30,000 THB", "30,001–50,000 THB", "Above 50,001 THB"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
-    question:"6. ภูมิลำเนา",
+    mainTitle:{ TH: "ข้อมูลทั่วไป (ต่อ)", EN: "General Information (Cont.)" },
+    question:{ TH: "6. ภูมิลำเนา", EN: "6. Region of Residence" },
     type:"choice",
-    options:["ภาคเหนือ", "ภาคตะวันออกเฉียงเหนือ", "ภาคกลาง", "ภาคตะวันออก", "ภาคตะวันตก", "ภาคใต้", "กรุงเทพมหานคร", "ภูมิภาคอื่น ๆ/นอกประเทศไทย"]
+    options:{
+        TH: ["ภาคเหนือ", "ภาคตะวันออกเฉียงเหนือ", "ภาคกลาง", "ภาคตะวันออก", "ภาคตะวันตก", "ภาคใต้", "กรุงเทพมหานคร", "ภูมิภาคอื่น ๆ/นอกประเทศไทย"],
+        EN: ["Northern Region", "Northeastern Region (Isan)", "Central Region", "Eastern Region", "Western Region", "Southern Region", "Bangkok", "Other / Outside Thailand"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
-    question:"7. โดยปกติแล้วท่านเดินทางท่องเที่ยวพักผ่อนกี่ครั้งต่อปี",
+    mainTitle:{ TH: "ข้อมูลทั่วไป (ต่อ)", EN: "General Information (Cont.)" },
+    question:{ TH: "7. โดยปกติแล้วท่านเดินทางท่องเที่ยวพักผ่อนกี่ครั้งต่อปี", EN: "7. How often do you travel for leisure per year?" },
     type:"choice",
-    options:["1–2 ครั้ง", "3–5 ครั้ง", "6–10 ครั้ง", "มากกว่า 10 ครั้ง", "ไม่ได้เดินทางเพื่อการพักผ่อน"]
+    options:{
+        TH: ["1–2 ครั้ง", "3–5 ครั้ง", "6–10 ครั้ง", "มากกว่า 10 ครั้ง", "ไม่ได้เดินทางเพื่อการพักผ่อน"],
+        EN: ["1–2 times", "3–5 times", "6–10 times", "More than 10 times", "Do not travel for leisure"]
+    }
 },
 {
     part:1,
     headerTitle:"PART I",
-    mainTitle:"ข้อมูลทั่วไป (ต่อ)",
-    question:"8. โดยทั่วไป ท่านสนใจหัวข้อใดมากที่สุด",
-    note:"เลือกตอบได้หลายข้อ",
+    mainTitle:{ TH: "ข้อมูลทั่วไป (ต่อ)", EN: "General Information (Cont.)" },
+    question:{ TH: "8. โดยทั่วไป ท่านสนใจหัวข้อใดมากที่สุด", EN: "8. Which topics interest you the most?" },
+    note:{ TH: "เลือกตอบได้หลายข้อ", EN: "Multiple choices allowed" },
     type:"multi",
-    options:["ประวัติศาสตร์", "วัฒนธรรม", "การท่องเที่ยว", "สงครามและความขัดแย้ง", "ภัยพิบัติทางธรรมชาติ", "เรื่องลึกลับและเหตุการณ์ที่อธิบายไม่ได้", "อาชญากรรมและเรื่องจริง", "อื่น ๆ"]
+    options:{
+        TH: ["ประวัติศาสตร์", "วัฒนธรรม", "การท่องเที่ยว", "สงครามและความขัดแย้ง", "ภัยพิบัติทางธรรมชาติ", "เรื่องลึกลับและเหตุการณ์ที่อธิบายไม่ได้", "อาชญากรรมและเรื่องจริง", "อื่น ๆ"],
+        EN: ["History", "Culture", "Tourism", "War and Conflict", "Natural Disasters", "Mystery and Unexplained Events", "Crime and True Stories", "Other"]
+    }
 },
 
 /* ================= PART 2 (Page 2) ================= */
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้",
-    question:"1. ท่านเคยพบเห็นหรือเคยรับรู้เกี่ยวกับสถานที่ท่องเที่ยวลักษณะดังกล่าวหรือไม่",
+    mainTitle:{ TH: "การรับรู้", EN: "Perception" },
+    question:{ TH: "1. ท่านเคยพบเห็นหรือเคยรับรู้เกี่ยวกับสถานที่ท่องเที่ยวลักษณะดังกล่าวหรือไม่", EN: "1. Have you ever encountered or known about such tourism sites?" },
     type:"choice",
-    options:["เคย", "ไม่เคย", "ไม่แน่ใจ"]
+    options:{
+        TH: ["เคย", "ไม่เคย", "ไม่แน่ใจ"],
+        EN: ["Yes", "No", "Not sure"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้",
-    question:"2. ก่อนทำแบบสอบถามนี้ ท่านเคยได้ยินคำว่า “การท่องเที่ยวเชิงมืด (Dark Tourism)” มาก่อนหรือไม่",
+    mainTitle:{ TH: "การรับรู้", EN: "Perception" },
+    question:{ TH: "2. ก่อนทำแบบสอบถามนี้ ท่านเคยได้ยินคำว่า “การท่องเที่ยวเชิงมืด (Dark Tourism)” มาก่อนหรือไม่", EN: "2. Before this survey, had you ever heard of 'Dark Tourism'?" },
     type:"choice",
-    options:["เคย และเข้าใจความหมาย", "เคย แต่ไม่แน่ใจหมายถึงอะไร", "เคยเห็นหรือได้ยินผ่านๆ แต่ไม่ทราบว่าเรียกว่าอะไร", "ไม่เคยได้ยินคำนี้มาก่อน"]
+    options:{
+        TH: ["เคย และเข้าใจความหมาย", "เคย แต่ไม่แน่ใจหมายถึงอะไร", "เคยเห็นหรือได้ยินผ่านๆ แต่ไม่ทราบว่าเรียกว่าอะไร", "ไม่เคยได้ยินคำนี้มาก่อน"],
+        EN: ["Yes and understand its meaning", "Yes, but not sure what it means", "Have seen/heard casually but didn't know the term", "Never heard of it before"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้",
-    question:"3. ท่านรู้จักหรือรับทราบข้อมูลเกี่ยวกับแหล่งท่องเที่ยวประวัติศาสตร์สงครามมากน้อยเพียงใด",
+    mainTitle:{ TH: "การรับรู้", EN: "Perception" },
+    question:{ TH: "3. ท่านรู้จักหรือรับทราบข้อมูลเกี่ยวกับแหล่งท่องเที่ยวประวัติศาสตร์สงครามมากน้อยเพียงใด", EN: "3. How familiar are you with war history tourism sites?" },
     type:"choice",
-    options:["ไม่รู้จักเลย", "รู้จักเล็กน้อย", "รู้จักพอสมควร", "รู้จักดี", "รู้จักเป็นอย่างดี"]
+    options:{
+        TH: ["ไม่รู้จักเลย", "รู้จักเล็กน้อย", "รู้จักพอสมควร", "รู้จักดี", "รู้จักเป็นอย่างดี"],
+        EN: ["Not familiar at all", "Slightly familiar", "Moderately familiar", "Very familiar", "Extremely familiar"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้",
-    question:"4. ท่านเคยติดตามข่าวสาร/ข้อมูลเกี่ยวกับสงคราม ความขัดแย้ง เหตุการณ์ทางประวัติศาสตร์ บ่อยเพียงใด",
+    mainTitle:{ TH: "การรับรู้", EN: "Perception" },
+    question:{ TH: "4. ท่านเคยติดตามข่าวสาร/ข้อมูลเกี่ยวกับสงคราม ความขัดแย้ง เหตุการณ์ทางประวัติศาสตร์ บ่อยเพียงใด", EN: "4. How often do you follow news/info regarding war, conflict, or historical events?" },
     type:"choice",
-    options:["ไม่เคย", "นาน ๆ ครั้ง", "บางครั้ง", "บ่อยครั้ง", "เป็นประจำ"]
+    options:{
+        TH: ["ไม่เคย", "นาน ๆ ครั้ง", "บางครั้ง", "บ่อยครั้ง", "เป็นประจำ"],
+        EN: ["Never", "Rarely", "Sometimes", "Often", "Regularly"]
+    }
 },
 
 /* ================= PART 2 (Page 3) ================= */
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้ (ต่อ)",
-    question:"5. ท่านเคยเดินทางไปเยี่ยมชมสถานที่ที่มีลักษณะดังกล่าวหรือไม่",
+    mainTitle:{ TH: "การรับรู้ (ต่อ)", EN: "Perception (Cont.)" },
+    question:{ TH: "5. ท่านเคยเดินทางไปเยี่ยมชมสถานที่ที่มีลักษณะดังกล่าวหรือไม่", EN: "5. Have you ever visited such sites?" },
     type:"choice",
-    options:["เคย", "ไม่เคย", "ไม่แน่ใจ"]
+    options:{
+        TH: ["เคย", "ไม่เคย", "ไม่แน่ใจ"],
+        EN: ["Yes", "No", "Not sure"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้ (ต่อ)",
-    question:"6. หากเคย ท่านเคยเยี่ยมชมสถานที่ประเภทใดบ้าง",
-    note:"เลือกตอบได้หลายข้อ",
+    mainTitle:{ TH: "การรับรู้ (ต่อ)", EN: "Perception (Cont.)" },
+    question:{ TH: "6. หากเคย ท่านเคยเยี่ยมชมสถานที่ประเภทใดบ้าง", EN: "6. If yes, what types of sites have you visited?" },
+    note:{ TH: "เลือกตอบได้หลายข้อ", EN: "Multiple choices allowed" },
     type:"multi",
-    options:["สนามรบ/พื้นที่เคยเกิดการสู้รบ", "อนุสรณ์สถานสงคราม", "พิพิธภัณฑ์สงคราม/ประวัติศาสตร์", "สุสานทหาร", "ค่ายเชลยศึก", "สถานที่เกิดเหตุการณ์โศกนาฏกรรม", "ภัยพิบัติ", "อื่น ๆ"]
+    options:{
+        TH: ["สนามรบ/พื้นที่เคยเกิดการสู้รบ", "อนุสรณ์สถานสงคราม", "พิพิธภัณฑ์สงคราม/ประวัติศาสตร์", "สุสานทหาร", "ค่ายเชลยศึก", "สถานที่เกิดเหตุการณ์โศกนาฏกรรม", "ภัยพิบัติ", "อื่น ๆ"],
+        EN: ["Battlefields / Combat zones", "War memorials", "War / History museums", "Military cemeteries", "Prisoner of war camps", "Tragedy event sites", "Natural disaster sites", "Other"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้ (ต่อ)",
-    question:"7. ท่านเคยได้รับข้อมูลเกี่ยวกับแหล่งท่องเที่ยวเชิงมืดจากแหล่งใดบ้าง",
-    note:"เลือกตอบได้หลายข้อ",
+    mainTitle:{ TH: "การรับรู้ (ต่อ)", EN: "Perception (Cont.)" },
+    question:{ TH: "7. ท่านเคยได้รับข้อมูลเกี่ยวกับแหล่งท่องเที่ยวเชิงมืดจากแหล่งใดบ้าง", EN: "7. Where have you received information about dark tourism sites?" },
+    note:{ TH: "เลือกตอบได้หลายข้อ", EN: "Multiple choices allowed" },
     type:"multi",
-    options:["Facebook", "TikTok", "YouTube", "Instagram", "เว็บไซต์ท่องเที่ยว", "ข่าว/สื่อ", "เพื่อน/ครอบครัว", "สถานศึกษา", "อื่น ๆ"]
+    options:{
+        TH: ["Facebook", "TikTok", "YouTube", "Instagram", "เว็บไซต์ท่องเที่ยว", "ข่าว/สื่อ", "เพื่อน/ครอบครัว", "สถานศึกษา", "อื่น ๆ"],
+        EN: ["Facebook", "TikTok", "YouTube", "Instagram", "Travel websites", "News / Media", "Friends / Family", "Educational institution", "Other"]
+    }
 },
 {
     part:2,
     headerTitle:"PART II",
-    mainTitle:"การรับรู้ (ต่อ)",
-    question:"8. หากท่านเคยเยี่ยมชมสถานที่ที่เกี่ยวข้องกับสงครามหรือโศกนาฏกรรม เหตุผลใดที่ทำให้ท่านสนใจเดินทางไปสถานที่ดังกล่าว",
-    note:"เลือกตอบได้หลายข้อ",
+    mainTitle:{ TH: "การรับรู้ (ต่อ)", EN: "Perception (Cont.)" },
+    question:{ TH: "8. หากท่านเคยเยี่ยมชมสถานที่ที่เกี่ยวข้องกับสงครามหรือโศกนาฏกรรม เหตุผลใดที่ทำให้ท่านสนใจเดินทางไปสถานที่ดังกล่าว", EN: "8. If you visited war or tragedy sites, what motivated you?" },
+    note:{ TH: "เลือกตอบได้หลายข้อ", EN: "Multiple choices allowed" },
     type:"multi",
-    options:["ได้รับความรู้หรือความเข้าใจประวัติศาสตร์มากขึ้น", "รู้สึกอยากเรียนรู้เกี่ยวกับเหตุการณ์นั้นเพิ่มเติม", "รู้สึกเห็นอกเห็นใจผู้ที่ได้รับผลกระทบ", "รู้สึกตระหนักถึงคุณค่าของชีวิตมากขึ้น", "รู้สึกเคารพต่อความทรงจำของผู้ที่ได้รับผลกระทบ", "รู้สึกเศร้าหรือสะเทือนใจ", "รู้สึกว่าการได้เห็นสถานที่จริงช่วยให้เข้าใจมากขึ้น", "อื่น ๆ"]
+    options:{
+        TH: ["ได้รับความรู้หรือความเข้าใจประวัติศาสตร์มากขึ้น", "รู้สึกอยากเรียนรู้เกี่ยวกับเหตุการณ์นั้นเพิ่มเติม", "รู้สึกเห็นอกเห็นใจผู้ที่ได้รับผลกระทบ", "รู้สึกตระหนักถึงคุณค่าของชีวิตมากขึ้น", "รู้สึกเคารพต่อความทรงจำของผู้ที่ได้รับผลกระทบ", "รู้สึกเศร้าหรือสะเทือนใจ", "รู้สึกว่าการได้เห็นสถานที่จริงช่วยให้เข้าใจมากขึ้น", "อื่น ๆ"],
+        EN: ["Gained historical knowledge / understanding", "Wanted to learn more about the event", "Felt empathy for those affected", "Realized the value of life", "Respected the memory of those affected", "Felt sorrow or emotional impact", "Seeing real sites helped understanding", "Other"]
+    }
 },
 
 /* ================= PART 3 (Page 4) ================= */
 {
     part:3,
     headerTitle:"PART III",
-    mainTitle:"ด้านความสนใจประวัติศาสตร์ของท่าน",
-    instructionText:"โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน",
+    mainTitle:{ TH: "ด้านความสนใจประวัติศาสตร์ของท่าน", EN: "Your Interest in History" },
+    instructionText:{ TH: "โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน", EN: "Please select options according to your level of agreement" },
     type:"rating",
-    subquestions:[
-        "ฉันสนใจเรียนรู้ประวัติศาสตร์ผ่านการเดินทาง",
-        "ฉันชอบเยี่ยมชมสถานที่ที่มีความสำคัญทางประวัติศาสตร์",
-        "ฉันชอบศึกษาประวัติหรือเรื่องราวของสถานที่ก่อนเดินทาง",
-        "การเรียนรู้เรื่องราวในอดีตเป็นแรงจูงใจให้ฉันเดินทาง",
-        "ฉันเห็นว่าการเยี่ยมชมสถานที่จริงช่วยให้เข้าใจประวัติศาสตร์ได้มากขึ้น"
-    ]
+    subquestions:{
+        TH: [
+            "ฉันสนใจเรียนรู้ประวัติศาสตร์ผ่านการเดินทาง",
+            "ฉันชอบเยี่ยมชมสถานที่ที่มีความสำคัญทางประวัติศาสตร์",
+            "ฉันชอบศึกษาประวัติหรือเรื่องราวของสถานที่ก่อนเดินทาง",
+            "การเรียนรู้เรื่องราวในอดีตเป็นแรงจูงใจให้ฉันเดินทาง",
+            "ฉันเห็นว่าการเยี่ยมชมสถานที่จริงช่วยให้เข้าใจประวัติศาสตร์ได้มากขึ้น"
+        ],
+        EN: [
+            "I am interested in learning history through travel.",
+            "I enjoy visiting historically significant places.",
+            "I like studying the background or story of a place before traveling.",
+            "Learning about the past motivates me to travel.",
+            "Visiting real sites helps me better understand history."
+        ]
+    }
 },
 
 /* ================= PART 4 (Page 5) ================= */
 {
     part:4,
     headerTitle:"PART IV",
-    mainTitle:"ด้านอิทธิพลของสื่อสังคมและสื่อออนไลน์ของท่าน",
-    instructionText:"โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน",
+    mainTitle:{ TH: "ด้านอิทธิพลของสื่อสังคมและสื่อออนไลน์ของท่าน", EN: "Influence of Social & Online Media" },
+    instructionText:{ TH: "โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน", EN: "Please select options according to your level of agreement" },
     type:"rating",
-    subquestions:[
-        "ฉันมักพบข้อมูลแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามผ่านสื่อออนไลน์",
-        "รีวิว/วิดีโอในสื่อออนไลน์ทำให้ฉันสนใจแหล่งท่องเที่ยวประเภทนี้มากขึ้น",
-        "สื่อออนไลน์ช่วยให้ฉันรู้จักแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามมากขึ้น",
-        "ฉันมักค้นหาข้อมูลเกี่ยวกับแหล่งท่องเที่ยวผ่านสื่อออนไลน์ก่อนตัดสินใจเดินทาง",
-        "ข้อมูลที่เกี่ยวกับแหล่งท่องเที่ยวจากสื่อออนไลน์มีอิทธิพลต่อการตัดสินใจเดินทางของฉัน"
-    ]
+    subquestions:{
+        TH: [
+            "ฉันมักพบข้อมูลแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามผ่านสื่อออนไลน์",
+            "รีวิว/วิดีโอในสื่อออนไลน์ทำให้ฉันสนใจแหล่งท่องเที่ยวประเภทนี้มากขึ้น",
+            "สื่อออนไลน์ช่วยให้ฉันรู้จักแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงครามมากขึ้น",
+            "ฉันมักค้นหาข้อมูลเกี่ยวกับแหล่งท่องเที่ยวผ่านสื่อออนไลน์ก่อนตัดสินใจเดินทาง",
+            "ข้อมูลที่เกี่ยวกับแหล่งท่องเที่ยวจากสื่อออนไลน์มีอิทธิพลต่อการตัดสินใจเดินทางของฉัน"
+        ],
+        EN: [
+            "I frequently encounter war history tourism info via online media.",
+            "Online reviews/videos make me more interested in such tourism sites.",
+            "Online media helps me discover war history tourism sites.",
+            "I usually search for tourist site info online before deciding to travel.",
+            "Online info about tourist sites influences my travel decisions."
+        ]
+    }
 },
 
 /* ================= PART 5 (Page 6) ================= */
 {
     part:5,
     headerTitle:"PART V",
-    mainTitle:"ด้านความอยากรู้อยากเห็นของท่าน",
-    instructionText:"โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน",
+    mainTitle:{ TH: "ด้านความอยากรู้อยากเห็นของท่าน", EN: "Your Curiosity" },
+    instructionText:{ TH: "โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน", EN: "Please select options according to your level of agreement" },
     type:"rating",
-    subquestions:[
-        "ฉันอยากเห็นสถานที่จริงที่เคยเกิดเหตุการณ์สำคัญ",
-        "ฉันสนใจเรื่องราวเบื้องหลังของสถานที่ที่เกี่ยวข้องกับเหตุการณ์ในอดีต",
-        "ฉันอยากสัมผัสบรรยากาศของสถานที่จริงที่มีทางประวัติศาสตร์",
-        "เมื่อได้รับรู้เรื่องราว ฉันมักอยากไปเห็นสถานที่ด้วยตนเอง",
-        "ฉันมักค้นหาข้อมูลเพิ่มเติมเกี่ยวกับสถานที่ที่มีเรื่องราวทางประวัติศาสตร์"
-    ]
+    subquestions:{
+        TH: [
+            "ฉันอยากเห็นสถานที่จริงที่เคยเกิดเหตุการณ์สำคัญ",
+            "ฉันสนใจเรื่องราวเบื้องหลังของสถานที่ที่เกี่ยวข้องกับเหตุการณ์ในอดีต",
+            "ฉันอยากสัมผัสบรรยากาศของสถานที่จริงที่มีทางประวัติศาสตร์",
+            "เมื่อได้รับรู้เรื่องราว ฉันมักอยากไปเห็นสถานที่ด้วยตนเอง",
+            "ฉันมักค้นหาข้อมูลเพิ่มเติมเกี่ยวกับสถานที่ที่มีเรื่องราวทางประวัติศาสตร์"
+        ],
+        EN: [
+            "I want to see real places where major events occurred.",
+            "I am interested in the backstory of historical event sites.",
+            "I want to experience the atmosphere of real historical sites.",
+            "After hearing stories, I often want to see the place myself.",
+            "I tend to search for more info about places with historical stories."
+        ]
+    }
 },
 
 /* ================= PART 6 (Page 7) ================= */
 {
     part:6,
     headerTitle:"PART VI",
-    mainTitle:"ความตั้งใจในการเดินทาง",
-    instructionText:"โปรดคลิกตัวเลือกตามระดับความตั้งใจของท่าน",
+    mainTitle:{ TH: "ความตั้งใจในการเดินทาง", EN: "Travel Intention" },
+    instructionText:{ TH: "โปรดคลิกตัวเลือกตามระดับความตั้งใจของท่าน", EN: "Please select options according to your intention level" },
     type:"rating",
-    subquestions:[
-        "ฉันตั้งใจจะเดินทางไปยังแหล่งท่องเที่ยวประวัติศาสตร์สงครามในอนาคต",
-        "หากมีโอกาส ฉันจะเลือกเดินทางไปสถานที่ประเภทนี้",
-        "ฉันมีแนวโน้มจะวางแผนเดินทางไปยังแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงคราม",
-        "ฉันมีความต้องการเดินทางไปสถานที่ประเภทนี้",
-        "ฉันยินดีใช้เวลาและค่าใช้จ่ายเพื่อเดินทางไปสถานที่ท่องเที่ยวดังกล่าว"
-    ]
+    subquestions:{
+        TH: [
+            "ฉันตั้งใจจะเดินทางไปยังแหล่งท่องเที่ยวประวัติศาสตร์สงครามในอนาคต",
+            "หากมีโอกาส ฉันจะเลือกเดินทางไปสถานที่ประเภทนี้",
+            "ฉันมีแนวโน้มจะวางแผนเดินทางไปยังแหล่งท่องเที่ยวที่เกี่ยวข้องกับประวัติศาสตร์สงคราม",
+            "ฉันมีความต้องการเดินทางไปสถานที่ประเภทนี้",
+            "ฉันยินดีใช้เวลาและค่าใช้จ่ายเพื่อเดินทางไปสถานที่ท่องเที่ยวดังกล่าว"
+        ],
+        EN: [
+            "I intend to visit war history tourism sites in the future.",
+            "Given the opportunity, I would choose to visit this type of place.",
+            "I am likely to plan trips to war history tourism sites.",
+            "I have a strong desire to travel to such places.",
+            "I am willing to spend time and money visiting such tourist destinations."
+        ]
+    }
 },
 
 /* ================= PART 7 (Page 8) ================= */
 {
     part:7,
     headerTitle:"PART VII",
-    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
-    question:"1. ท่านมีความคิดเห็นหรือความรู้สึกอย่างไร ต่อการเดินทางท่องเที่ยวไปยังสถานที่เกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรม",
+    mainTitle:{ TH: "ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม", EN: "Qualitative Suggestions & Additional Comments" },
+    question:{ TH: "1. ท่านมีความคิดเห็นหรือความรู้สึกอย่างไร ต่อการเดินทางท่องเที่ยวไปยังสถานที่เกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรม", EN: "1. What are your thoughts or feelings about traveling to war, death, or tragedy sites?" },
     type:"text",
-    note:"(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)"
+    note:{ TH: "(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)", EN: "(If you prefer not to answer, you can type '-')" }
 },
 {
     part:7,
     headerTitle:"PART VII",
-    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
-    question:"2. อะไรคือเหตุผลสำคัญที่ทำให้ท่านสนใจ หรือไม่สนใจ เดินทางไปแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย",
+    mainTitle:{ TH: "ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม", EN: "Qualitative Suggestions & Additional Comments" },
+    question:{ TH: "2. อะไรคือเหตุผลสำคัญที่ทำให้ท่านสนใจ หรือไม่สนใจ เดินทางไปแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทย", EN: "2. What is the key reason you are interested or not interested in visiting war-zone dark tourism in Thailand?" },
     type:"text",
-    note:"(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)"
+    note:{ TH: "(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)", EN: "(If you prefer not to answer, you can type '-')" }
 },
 {
     part:7,
     headerTitle:"PART VII",
-    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
-    question:"3. ท่านคิดว่าการนำเสนอเรื่องราวเกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรมควรมีลักษณะอย่างไร เพื่อความเหมาะสมและเคารพต่อผู้ที่ได้รับผลกระทบ",
+    mainTitle:{ TH: "ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม", EN: "Qualitative Suggestions & Additional Comments" },
+    question:{ TH: "3. ท่านคิดว่าการนำเสนอเรื่องราวเกี่ยวกับสงคราม ความตาย หรือโศกนาฏกรรมควรมีลักษณะอย่างไร เพื่อความเหมาะสมและเคารพต่อผู้ที่ได้รับผลกระทบ", EN: "3. How should stories of war, death, or tragedy be presented appropriately and respectfully to those affected?" },
     type:"text",
-    note:"(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)"
+    note:{ TH: "(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)", EN: "(If you prefer not to answer, you can type '-')" }
 },
 {
     part:7,
     headerTitle:"PART VII",
-    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
-    question:"4. ท่านมีข้อเสนอแนะเพิ่มเติมสำหรับการพัฒนาแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทยอย่างไร",
+    mainTitle:{ TH: "ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม", EN: "Qualitative Suggestions & Additional Comments" },
+    question:{ TH: "4. ท่านมีข้อเสนอแนะเพิ่มเติมสำหรับการพัฒนาแหล่งท่องเที่ยวเชิงมืดประเภทพื้นที่สงครามในประเทศไทยอย่างไร", EN: "4. Do you have additional suggestions for developing war-zone dark tourism in Thailand?" },
     type:"text",
     optional:true,
-    note:"(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)"
+    note:{ TH: "(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)", EN: "(If you prefer not to answer, you can type '-')" }
 },
 {
     part:7,
     headerTitle:"PART VII",
-    mainTitle:"ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม",
-    question:"5. ข้อเสนอแนะเพิ่มเติมอื่น ๆ (หากมี)",
+    mainTitle:{ TH: "ข้อเสนอแนะเชิงคุณภาพและข้อเสนอเพิ่มเติม", EN: "Qualitative Suggestions & Additional Comments" },
+    question:{ TH: "5. ข้อเสนอแนะเพิ่มเติมอื่น ๆ (หากมี)", EN: "5. Other additional suggestions (if any)" },
     type:"text",
     optional:true,
-    note:"(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)"
+    note:{ TH: "(หากไม่สะดวกตอบ สามารถพิมพ์เครื่องหมาย - ได้)", EN: "(If you prefer not to answer, you can type '-')" }
 }
 
 ];
@@ -2356,6 +2596,11 @@ const ambientSound = document.getElementById("ambientSound");
 const clickSoundAudio = document.getElementById("clickSoundAudio");
 const paperSound = document.getElementById("paperSound");
 const globalWarningBanner = document.getElementById("globalWarningBanner");
+
+const langSwitchButton = document.getElementById("langSwitchButton");
+const langSelectPopup = document.getElementById("langSelectPopup");
+const btnThai = document.getElementById("btnThai");
+const btnEng = document.getElementById("btnEng");
 
 function playClick(){
     if(!soundOn) return;
@@ -2397,12 +2642,60 @@ soundButton.addEventListener("click",()=>{
     }
 });
 
+/* =========================================================
+    LANGUAGE SWITCH SYSTEM
+========================================================= */
+function changeLanguage(lang){
+    currentLang = lang;
+    if(langSwitchButton) {
+        langSwitchButton.textContent = (lang === "TH") ? "EN" : "TH";
+    }
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if(dict[lang][key]){
+            el.innerHTML = dict[lang][key];
+        }
+    });
+
+    const surveySec = document.getElementById("survey");
+    if(surveySec && surveySec.classList.contains("active")){
+        renderPage();
+    }
+}
+
+if(btnThai){
+    btnThai.addEventListener("click", ()=>{
+        playClick();
+        changeLanguage("TH");
+        if(langSelectPopup) langSelectPopup.classList.remove("active");
+    });
+}
+
+if(btnEng){
+    btnEng.addEventListener("click", ()=>{
+        playClick();
+        changeLanguage("EN");
+        if(langSelectPopup) langSelectPopup.classList.remove("active");
+    });
+}
+
+if(langSwitchButton){
+    langSwitchButton.addEventListener("click", ()=>{
+        playClick();
+        const nextLang = (currentLang === "TH") ? "EN" : "TH";
+        changeLanguage(nextLang);
+    });
+}
+
 function showPage(id){
     pageElements.forEach(page=>{
         page.classList.remove("active");
     });
     const target = document.getElementById(id);
-    target.classList.add("active");
+    if(target){
+        target.classList.add("active");
+    }
 }
 
 startButton.addEventListener("click",()=>{
@@ -2437,14 +2730,12 @@ ageNoButton.addEventListener("click",()=>{
     agePopup.innerHTML = `
         <div class="info-paper">
             <div class="paper-label">PARTICIPANT ELIGIBILITY</div>
-            <h2 class="paper-title">ขอขอบคุณสำหรับความสนใจ</h2>
+            <h2 class="paper-title">${currentLang === "TH" ? "ขอขอบคุณสำหรับความสนใจ" : "Thank You for Your Interest"}</h2>
             <div class="gold-line"></div>
             <div class="paper-text" style="text-align:center;">
-                แบบสอบถามฉบับนี้กำหนดกลุ่มตัวอย่างเป็นบุคคลที่มีอายุ 18 ปีขึ้นไป
-                <br><br>
-                ท่านจึงไม่สามารถเข้าสู่แบบสอบถามในครั้งนี้ได้
+                ${currentLang === "TH" ? "แบบสอบถามฉบับนี้กำหนดกลุ่มตัวอย่างเป็นบุคคลที่มีอายุ 18 ปีขึ้นไป<br><br>ท่านจึงไม่สามารถเข้าสู่แบบสอบถามในครั้งนี้ได้" : "This survey is restricted to participants aged 18 and above.<br><br>You are unable to proceed with this survey."}
             </div>
-            <button type="button" class="paper-button" onclick="location.reload()">กลับหน้าหลัก</button>
+            <button type="button" class="paper-button" onclick="location.reload()">${currentLang === "TH" ? "กลับหน้าหลัก" : "Return to Home"}</button>
         </div>
     `;
 });
@@ -2473,7 +2764,7 @@ function renderPage(){
     const heading = document.createElement("div");
     heading.className = "page-heading";
     heading.innerHTML = `
-        <div class="section-label">${pageQuestions[0].mainTitle}</div>
+        <div class="section-label">${pageQuestions[0].mainTitle[currentLang]}</div>
     `;
     questionCard.appendChild(heading);
 
@@ -2506,7 +2797,7 @@ function renderChoice(q,index){
 
     const title = document.createElement("h3");
     title.className = "question-text";
-    title.textContent = q.question;
+    title.textContent = q.question[currentLang];
     item.appendChild(title);
 
     const answersBox = document.createElement("div");
@@ -2520,19 +2811,22 @@ function renderChoice(q,index){
 function renderChoiceState(q, item, answersBox, key){
     answersBox.innerHTML = "";
     let value = answers[key];
+    const opts = q.options[currentLang];
+    const optsTh = q.options["TH"];
 
-    q.options.forEach(option=>{
+    opts.forEach((option, i)=>{
+        const originalThOption = optsTh[i];
         const wrapper = document.createElement("div");
         const button = document.createElement("button");
         button.type = "button";
         button.className = "answer";
         button.textContent = option;
 
-        const isOther = option.includes("อื่น");
+        const isOther = originalThOption.includes("อื่น") || option.toLowerCase().includes("other");
 
         if(isOther && typeof value === "object" && value !== null){
             button.classList.add("selected");
-        } else if(value === option){
+        } else if(value === originalThOption){
             button.classList.add("selected");
         }
 
@@ -2544,7 +2838,7 @@ function renderChoiceState(q, item, answersBox, key){
                     detail: (typeof value === "object" && value !== null) ? value.detail : ""
                 };
             }else{
-                answers[key] = option;
+                answers[key] = originalThOption;
             }
 
             item.classList.remove("incomplete");
@@ -2555,8 +2849,9 @@ function renderChoiceState(q, item, answersBox, key){
             if(unansweredCount === 0){
                 globalWarningBanner.classList.remove("active");
             } else {
-                globalWarningBanner.textContent = 
-                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+                globalWarningBanner.textContent = currentLang === "TH" ? 
+                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)` :
+                    `⚠ Please complete all pending questions (Remaining: ${unansweredCount})`;
             }
 
             updateNavigation();
@@ -2569,7 +2864,7 @@ function renderChoiceState(q, item, answersBox, key){
             const input = document.createElement("input");
             input.type = "text";
             input.className = "other-input";
-            input.placeholder = "โปรดระบุรายละเอียด...";
+            input.placeholder = currentLang === "TH" ? "โปรดระบุรายละเอียด..." : "Please specify...";
             input.value = value.detail || "";
             input.addEventListener("input", e=>{
                 if(answers[key] && typeof answers[key] === "object"){
@@ -2597,8 +2892,15 @@ function renderMulti(q,index){
 
     const title = document.createElement("h3");
     title.className = "question-text";
-    title.textContent = q.question;
+    title.textContent = q.question[currentLang];
     item.appendChild(title);
+
+    if(q.note){
+        const noteEl = document.createElement("div");
+        noteEl.className = "question-note";
+        noteEl.textContent = q.note[currentLang];
+        item.appendChild(noteEl);
+    }
 
     const answersBox = document.createElement("div");
     answersBox.className = "answers";
@@ -2611,8 +2913,11 @@ function renderMulti(q,index){
 function renderMultiState(q, item, answersBox, key){
     answersBox.innerHTML = "";
     let current = Array.isArray(answers[key]) ? answers[key] : [];
+    const opts = q.options[currentLang];
+    const optsTh = q.options["TH"];
 
-    q.options.forEach(option=>{
+    opts.forEach((option, i)=>{
+        const originalThOption = optsTh[i];
         const wrapper = document.createElement("div");
         const button = document.createElement("button");
 
@@ -2620,11 +2925,11 @@ function renderMultiState(q, item, answersBox, key){
         button.className = "answer";
         button.textContent = option;
 
-        const isOther = option.includes("อื่น");
+        const isOther = originalThOption.includes("อื่น") || option.toLowerCase().includes("other");
         const otherObject = current.find(
             x => typeof x === "object" && x !== null && x.type === "other"
         );
-        const selected = isOther ? !!otherObject : current.includes(option);
+        const selected = isOther ? !!otherObject : current.includes(originalThOption);
 
         if(selected){
             button.classList.add("selected");
@@ -2646,10 +2951,10 @@ function renderMultiState(q, item, answersBox, key){
                     });
                 }
             }else{
-                if(list.includes(option)){
-                    list = list.filter(x => x !== option);
+                if(list.includes(originalThOption)){
+                    list = list.filter(x => x !== originalThOption);
                 }else{
-                    list.push(option);
+                    list.push(originalThOption);
                 }
             }
 
@@ -2665,8 +2970,9 @@ function renderMultiState(q, item, answersBox, key){
             if(unansweredCount === 0){
                 globalWarningBanner.classList.remove("active");
             } else {
-                globalWarningBanner.textContent = 
-                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+                globalWarningBanner.textContent = currentLang === "TH" ? 
+                    `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)` :
+                    `⚠ Please complete all pending questions (Remaining: ${unansweredCount})`;
             }
 
             updateNavigation();
@@ -2679,7 +2985,7 @@ function renderMultiState(q, item, answersBox, key){
             const input = document.createElement("input");
             input.type = "text";
             input.className = "other-input";
-            input.placeholder = "โปรดระบุรายละเอียด...";
+            input.placeholder = currentLang === "TH" ? "โปรดระบุรายละเอียด..." : "Please specify...";
             input.value = otherObject.detail || "";
 
             input.addEventListener("input", e=>{
@@ -2706,12 +3012,13 @@ function renderRating(q,index){
     const intro = document.createElement("div");
     intro.className = "header-instruction-box";
     intro.innerHTML = `
-        <div class="instruction-text">${q.instructionText || "โปรดคลิกตัวเลือกตามระดับความคิดเห็นของท่าน"}</div>
-        <div class="instruction-subtext">5 = มากที่สุด · 1 = น้อยที่สุด</div>
+        <div class="instruction-text">${q.instructionText[currentLang]}</div>
+        <div class="instruction-subtext">${currentLang === "TH" ? "5 = มากที่สุด · 1 = น้อยที่สุด" : "5 = Highest · 1 = Lowest"}</div>
     `;
     questionCard.appendChild(intro);
 
-    q.subquestions.forEach((text,subIndex)=>{
+    const subquestionsList = q.subquestions[currentLang];
+    subquestionsList.forEach((text,subIndex)=>{
         const box = document.createElement("div");
         box.className = "rating-question";
         box.id = "rating_item_" + questions.indexOf(q) + "_" + subIndex;
@@ -2724,7 +3031,7 @@ function renderRating(q,index){
         const row = document.createElement("div");
         row.className = "rating-row";
 
-        const labels = ["มากที่สุด", "มาก", "ปานกลาง", "น้อย", "น้อยที่สุด"];
+        const labels = dict[currentLang].scale_labels;
 
         [5,4,3,2,1].forEach((score,i)=>{
             const button = document.createElement("button");
@@ -2755,8 +3062,9 @@ function renderRating(q,index){
                 if(unansweredCount === 0){
                     globalWarningBanner.classList.remove("active");
                 } else {
-                    globalWarningBanner.textContent = 
-                        `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+                    globalWarningBanner.textContent = currentLang === "TH" ? 
+                        `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)` :
+                        `⚠ Please complete all pending questions (Remaining: ${unansweredCount})`;
                 }
 
                 updateNavigation();
@@ -2786,19 +3094,19 @@ function renderText(q,index){
 
     const title = document.createElement("h3");
     title.className = "question-text";
-    title.textContent = q.question;
+    title.textContent = q.question[currentLang];
     item.appendChild(title);
 
     if(q.note){
         const noteEl = document.createElement("div");
         noteEl.className = "question-note";
-        noteEl.textContent = q.note;
+        noteEl.textContent = q.note[currentLang];
         item.appendChild(noteEl);
     }
 
     const textarea = document.createElement("textarea");
     textarea.className = "text-answer";
-    textarea.placeholder = "พิมพ์ความคิดเห็นของท่าน...";
+    textarea.placeholder = currentLang === "TH" ? "พิมพ์ความคิดเห็นของท่าน..." : "Type your comments here...";
     textarea.value = answers[key] || "";
 
     textarea.addEventListener("input", e=>{
@@ -2844,7 +3152,7 @@ function questionAnswered(q){
 
     if(q.type === "rating"){
         if(!value || typeof value !== "object") return false;
-        return (Object.keys(value).length === q.subquestions.length);
+        return (Object.keys(value).length === q.subquestions["TH"].length);
     }
 
     if(q.type === "text"){
@@ -2883,7 +3191,9 @@ function findFirstUnanswered(){
 
 function showIncompleteWarning(){
     const unansweredCount = countUnansweredOnPage();
-    globalWarningBanner.textContent = `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)`;
+    globalWarningBanner.textContent = currentLang === "TH" ? 
+        `⚠ กรุณาตอบคำถามที่ยังค้างอยู่ให้ครบถ้วน (เหลืออีก ${unansweredCount} ข้อ)` :
+        `⚠ Please complete all pending questions (Remaining: ${unansweredCount})`;
     globalWarningBanner.classList.add("active");
 
     const result = findFirstUnanswered();
@@ -2896,7 +3206,7 @@ function showIncompleteWarning(){
     if(targetQuestion.type === "rating"){
         const value = answers[key] || {};
         let firstMissing = -1;
-        for(let i = 0; i < targetQuestion.subquestions.length; i++){
+        for(let i = 0; i < targetQuestion.subquestions["TH"].length; i++){
             if(value[i] === undefined){
                 firstMissing = i;
                 break;
@@ -2915,7 +3225,7 @@ function showIncompleteWarning(){
 
                 const message = document.createElement("div");
                 message.className = "incomplete-message";
-                message.textContent = "⚠ กรุณาให้คะแนนข้อย่อยนี้ก่อนดำเนินการต่อ";
+                message.textContent = currentLang === "TH" ? "⚠ กรุณาให้คะแนนข้อย่อยนี้ก่อนดำเนินการต่อ" : "⚠ Please rate this sub-question before proceeding";
                 target.appendChild(message);
 
                 setTimeout(()=>{
@@ -2937,7 +3247,7 @@ function showIncompleteWarning(){
 
         const message = document.createElement("div");
         message.className = "incomplete-message";
-        message.textContent = "⚠ กรุณาตอบคำถามข้อนี้ก่อนดำเนินการต่อ";
+        message.textContent = currentLang === "TH" ? "⚠ กรุณาตอบคำถามข้อนี้ก่อนดำเนินการต่อ" : "⚠ Please answer this question before proceeding";
         target.appendChild(message);
 
         setTimeout(()=>{
@@ -2951,9 +3261,9 @@ function updateNavigation(){
     nextButton.disabled = false;
 
     if(currentPage === pages.length - 1){
-        nextButton.textContent = "ส่งคำตอบ ✦";
+        nextButton.textContent = currentLang === "TH" ? "ส่งคำตอบ ✦" : "Submit ✦";
     }else{
-        nextButton.textContent = "ถัดไป →";
+        nextButton.textContent = currentLang === "TH" ? "ถัดไป →" : "Next →";
     }
 }
 
@@ -3032,7 +3342,6 @@ function calculateTraits() {
         if (count > 0) t4 = Math.round((sum / (count * 5)) * 100);
     }
 
-
     t5 = Math.round((t1 + t3) / 2);
     t6 = Math.round((t1 + t2) / 2);
 
@@ -3047,136 +3356,50 @@ function calculateTraits() {
 }
 
 /* =========================================================
-   CHARACTER DESCRIPTION
+    CHARACTER DESCRIPTION
 ========================================================= */
 
 function showCharacterDescription(character, scores){
-
-    let description = "";
-
-
-    switch(character.id){
-
-        case "witness":
-
-            description =
-                "คุณเป็นผู้ที่ให้ความสำคัญกับเรื่องราวในอดีต " +
-                "มองการเดินทางเป็นพื้นที่สำหรับเรียนรู้ ทำความเข้าใจ " +
-                "และมองเห็นคุณค่าของเหตุการณ์ทางประวัติศาสตร์ผ่านสถานที่จริง";
-
-            break;
-
-
-        case "seeker":
-
-            description =
-                "คุณเป็นผู้แสวงหาร่องรอยของเรื่องราวในอดีต " +
-                "มีความอยากรู้อยากเห็นสูง และมักต้องการค้นคว้าข้อมูล " +
-                "เพื่อทำความเข้าใจสถานที่และเหตุการณ์ให้ลึกซึ้งยิ่งขึ้น";
-
-            break;
-
-
-        case "empath":
-
-            description =
-                "คุณเป็นผู้ที่รับรู้เรื่องราวผ่านความรู้สึก " +
-                "ให้ความสำคัญกับผู้คน ความสูญเสีย และความทรงจำ " +
-                "จึงมองการเดินทางในฐานะการทำความเข้าใจและร่วมรำลึก";
-
-            break;
-
-
-        case "adventurer":
-
-            description =
-                "คุณเป็นผู้เปิดรับประสบการณ์และพร้อมออกเดินทาง " +
-                "มีความสนใจที่จะสัมผัสสถานที่จริงด้วยตนเอง " +
-                "และเรียนรู้เรื่องราวผ่านประสบการณ์ตรง";
-
-            break;
-
-
-        case "reflector":
-
-            description =
-                "คุณเป็นผู้ใคร่ครวญและมองเหตุการณ์ในอดีตอย่างลึกซึ้ง " +
-                "สนใจความหมายของความทรงจำและบทเรียนจากประวัติศาสตร์ " +
-                "มากกว่าการเดินทางเพียงเพื่อการท่องเที่ยว";
-
-            break;
-
-
-        case "memory-keeper":
-
-            description =
-                "คุณเป็นผู้ให้คุณค่ากับความทรงจำและการอนุรักษ์เรื่องราวในอดีต " +
-                "เชื่อว่าสถานที่และเรื่องเล่าควรถูกจดจำอย่างเหมาะสม " +
-                "และถ่ายทอดด้วยความเคารพต่อผู้ที่ได้รับผลกระทบ";
-
-            break;
-
-
-        default:
-
-            description =
-                "คุณมีความสนใจหลากหลายด้านต่อเรื่องราวทางประวัติศาสตร์ " +
-                "และการท่องเที่ยวเชิงมืด";
-
-    }
-
-
-    let existing =
-        document.getElementById(
-            "characterDescription"
-        );
-
-
-    if(!existing){
-
-        existing =
-            document.createElement("div");
-
-        existing.id =
-            "characterDescription";
-
-        existing.className =
-            "character-description";
-
-
-        const resultBox =
-            document.getElementById(
-                "resultCharacterContainer"
-            );
-
-
-        if(resultBox){
-
-            resultBox.appendChild(
-                existing
-            );
-
+    let descriptions = {
+        TH: {
+            witness: "คุณเป็นผู้ที่ให้ความสำคัญกับเรื่องราวในอดีต มองการเดินทางเป็นพื้นที่สำหรับเรียนรู้ ทำความเข้าใจ และมองเห็นคุณค่าของเหตุการณ์ทางประวัติศาสตร์ผ่านสถานที่จริง",
+            seeker: "คุณเป็นผู้แสวงหาร่องรอยของเรื่องราวในอดีต มีความอยากรู้อยากเห็นสูง และมักต้องการค้นคว้าข้อมูล เพื่อทำความเข้าใจสถานที่และเหตุการณ์ให้ลึกซึ้งยิ่งขึ้น",
+            empath: "คุณเป็นผู้ที่รับรู้เรื่องราวผ่านความรู้สึก ให้ความสำคัญกับผู้คน ความสูญเสีย และความทรงจำ จึงมองการเดินทางในฐานะการทำความเข้าใจและร่วมรำลึก",
+            adventurer: "คุณเป็นผู้เปิดรับประสบการณ์และพร้อมออกเดินทาง มีความสนใจที่จะสัมผัสสถานที่จริงด้วยตนเอง และเรียนรู้เรื่องราวผ่านประสบการณ์ตรง",
+            reflector: "คุณเป็นผู้ใคร่ครวญและมองเหตุการณ์ในอดีตอย่างลึกซึ้ง สนใจความหมายของความทรงจำและบทเรียนจากประวัติศาสตร์ มากกว่าการเดินทางเพียงเพื่อการท่องเที่ยว",
+            "memory-keeper": "คุณเป็นผู้ให้คุณค่ากับความทรงจำและการอนุรักษ์เรื่องราวในอดีต เชื่อว่าสถานที่และเรื่องเล่าควรถูกจดจำอย่างเหมาะสม และถ่ายทอดด้วยความเคารพต่อผู้ที่ได้รับผลกระทบ"
+        },
+        EN: {
+            witness: "You value past stories, viewing travel as a space for learning, understanding, and recognizing the value of historical events through real sites.",
+            seeker: "You are a seeker of past traces with high curiosity, often researching deeply to understand locations and events profoundly.",
+            empath: "You perceive stories through feelings, valuing people, loss, and memory, thus viewing travel as a way to understand and commemorate.",
+            adventurer: "You are open to experiences and ready to travel, eager to experience real sites firsthand and learn through direct exposure.",
+            reflector: "You contemplate past events deeply, focusing on the meaning of memory and history lessons rather than just leisure travel.",
+            "memory-keeper": "You value memory and the preservation of past stories, believing sites should be remembered properly and respectfully."
         }
+    };
 
+    let description = descriptions[currentLang][character.id] || descriptions[currentLang]["witness"];
+
+    let existing = document.getElementById("characterDescription");
+    if(!existing){
+        existing = document.createElement("div");
+        existing.id = "characterDescription";
+        existing.className = "character-description";
+        const resultBox = document.getElementById("resultCharacterContainer");
+        if(resultBox){
+            resultBox.appendChild(existing);
+        }
     }
-
 
     existing.innerHTML = `
-
         <div class="character-description-title">
-
-            ลักษณะการเดินทางของคุณ
-
+            ${currentLang === "TH" ? "ลักษณะการเดินทางของคุณ" : "Your Journey Profile"}
         </div>
-
         <div class="character-description-text">
-
             ${description}
-
         </div>
-
     `;
-
 }
 
 function processSurveyCompletion() {
@@ -3187,585 +3410,141 @@ function processSurveyCompletion() {
 const scriptURL = "https://script.google.com/macros/s/AKfycbyooc8AsXdXhj6b_6XZfwOw4HV2DLQO51VjXNzIDeOXppMRntAykL9WGv3H1UTFgb5E/exec";
   
     playClick();  
-  
     showPage("processing");  
+
+    playPaper();
   
-    const resultBox =  
-        document.getElementById("resultCharacterContainer");  
+    const resultBox = document.getElementById("resultCharacterContainer");  
+    const processingBox = document.getElementById("processingTextContainer");  
+    const thankyouBox = document.getElementById("combinedThankyouContainer");  
   
-    const processingBox =  
-        document.getElementById("processingTextContainer");  
-  
-    const thankyouBox =  
-        document.getElementById("combinedThankyouContainer");  
-  
-    if(resultBox){  
-        resultBox.style.display = "none";  
-    }  
-  
-    if(processingBox){  
-        processingBox.style.display = "block";  
-    }  
-  
-    if(thankyouBox){  
-        thankyouBox.style.display = "none";  
-    }  
-  
-  
-    /* =====================================================  
-       1. คำนวณคะแนน  
-    ===================================================== */  
+    if(resultBox){ resultBox.style.display = "none"; }  
+    if(processingBox){ processingBox.style.display = "block"; }  
+    if(thankyouBox){ thankyouBox.style.display = "none"; }  
   
     const finalScores = calculateTraits();  
   
-  
-    /* =====================================================  
-       2. แสดงคะแนนแบบ Real-time  
-    ===================================================== */  
-  
     const traitMeta = [  
-  
-        {  
-            key: "history",  
-            name: "ความสนใจเชิงประวัติศาสตร์",  
-            target: finalScores.history  
-        },  
-  
-        {  
-            key: "empathy",  
-            name: "ความเห็นอกเห็นใจ",  
-            target: finalScores.empathy  
-        },  
-  
-        {  
-            key: "curiosity",  
-            name: "ความใฝ่รู้",  
-            target: finalScores.curiosity  
-        },  
-  
-        {  
-            key: "experience",  
-            name: "การแสวงหาประสบการณ์",  
-            target: finalScores.experience  
-        },  
-  
-        {  
-            key: "reflection",  
-            name: "การใคร่ครวญ",  
-            target: finalScores.reflection  
-        },  
-  
-        {  
-            key: "memory",  
-            name: "การอนุรักษ์ความทรงจำ",  
-            target: finalScores.memory  
-        }  
-  
+        { key: "history", name: { TH: "ความสนใจเชิงประวัติศาสตร์", EN: "Historical Interest" }, target: finalScores.history },  
+        { key: "empathy", name: { TH: "ความเห็นอกเห็นใจ", EN: "Empathy" }, target: finalScores.empathy },  
+        { key: "curiosity", name: { TH: "ความใฝ่รู้", EN: "Curiosity" }, target: finalScores.curiosity },  
+        { key: "experience", name: { TH: "การแสวงหาประสบการณ์", EN: "Experience Seeking" }, target: finalScores.experience },  
+        { key: "reflection", name: { TH: "การใคร่ครวญ", EN: "Reflection" }, target: finalScores.reflection },  
+        { key: "memory", name: { TH: "การอนุรักษ์ความทรงจำ", EN: "Memory Preservation" }, target: finalScores.memory }  
     ];  
   
-  
-    const container =  
-        document.getElementById("traitScoresContainer");  
-  
+    const container = document.getElementById("traitScoresContainer");  
   
     if(container){  
-  
         container.innerHTML = "";  
-  
-  
         traitMeta.forEach(function(item, index){  
-  
-            const div =  
-                document.createElement("div");  
-  
-            div.className =  
-                "trait-score-item";  
-  
-  
+            const div = document.createElement("div");  
+            div.className = "trait-score-item";  
             div.innerHTML = `  
-  
                 <div class="trait-info">  
-  
-                    <span>  
-                        ${item.name}  
-                    </span>  
-  
-                    <strong  
-                        id="traitVal_${index}">  
-                        0%  
-                    </strong>  
-  
+                    <span>${item.name[currentLang]}</span>  
+                    <strong id="traitVal_${index}">0%</strong>  
                 </div>  
-  
                 <div class="trait-bar-bg">  
-  
-                    <div  
-                        class="trait-bar-fill"  
-                        id="traitBar_${index}">  
-                    </div>  
-  
+                    <div class="trait-bar-fill" id="traitBar_${index}"></div>  
                 </div>  
-  
             `;  
-  
-  
             container.appendChild(div);  
-  
         });  
-  
     }  
   
-  
-    /* =====================================================  
-       3. ส่งข้อมูลไป Google Sheets  
-         
-       ส่ง JSON โดยตรง  
-       Apps Script ตัวใหม่รองรับแล้ว  
-    ===================================================== */  
-  
     const payload = {};  
-  
-  
     Object.keys(answers).forEach(function(key){  
-  
         const value = answers[key];  
-  
-  
-        /*  
-         * Rating  
-         *  
-         * q_16  
-         * q_17  
-         * q_18  
-         * q_19  
-         *  
-         * ส่งเป็น object เดิม  
-         */  
-  
-        if(  
-            value !== null &&  
-            typeof value === "object" &&  
-            !Array.isArray(value) &&  
-            value.type !== "other"  
-        ){  
-  
+        if(value !== null && typeof value === "object" && !Array.isArray(value) && value.type !== "other"){  
             payload[key] = {};  
-  
             Object.keys(value).forEach(function(subKey){  
-  
-                payload[key][subKey] =  
-                    value[subKey];  
-  
+                payload[key][subKey] = value[subKey];  
             });  
-  
-        }  
-  
-        else {  
-  
+        } else {  
             payload[key] = value;  
-  
         }  
-  
     });  
   
-  
-    /*  
-     * ส่งข้อมูล  
-     */  
-  
- fetch(scriptURL, {  
-    method: "POST",  
-    mode: "no-cors",  
-    headers: {  
-        "Content-Type": "text/plain;charset=utf-8"  
-    },  
-    body: JSON.stringify(payload)  
-}) 
-.then(function(){  
-  
-     console.log(  
-         "THE DARK JOURNEY: ส่งข้อมูลสำเร็จ"  
-      );  
-  
- })  
- .catch(function(error){  
-  
-    console.error(  
-         "THE DARK JOURNEY: ส่งข้อมูลไม่สำเร็จ",  
-         error  
-     );  
-  
- });  
-  
-  
-    /* =====================================================  
-       4. Animation คะแนนวิ่ง  
-    ===================================================== */  
+    fetch(scriptURL, {  
+        method: "POST",  
+        mode: "no-cors",  
+        headers: { "Content-Type": "text/plain;charset=utf-8" },  
+        body: JSON.stringify(payload)  
+    })  
+    .then(function(){ console.log("THE DARK JOURNEY: ส่งข้อมูลสำเร็จ"); })  
+    .catch(function(error){ console.error("THE DARK JOURNEY: ส่งข้อมูลไม่สำเร็จ", error); });  
   
     let progress = 0;  
+    const interval = setInterval(function(){  
+        progress += 2;  
+        if(progress > 100){ progress = 100; }  
   
+        traitMeta.forEach(function(item,index){  
+            const currentVal = Math.round((progress / 100) * item.target);  
+            const valueEl = document.getElementById(`traitVal_${index}`);  
+            const barEl = document.getElementById(`traitBar_${index}`);  
+            if(valueEl){ valueEl.textContent = currentVal + "%"; }  
+            if(barEl){ barEl.style.width = currentVal + "%"; }  
+        });  
   
-    const interval =  
-        setInterval(function(){  
+        if(progress >= 100){  
+            clearInterval(interval);  
+            setTimeout(function(){  
+                if(processingBox){ processingBox.style.display = "none"; }  
   
-            progress += 2;  
-  
-  
-            if(progress > 100){  
-  
-                progress = 100;  
-  
-            }  
-  
-  
-            traitMeta.forEach(function(item,index){  
-  
-                const currentVal =  
-                    Math.round(  
-                        (progress / 100) *  
-                        item.target  
-                    );  
-  
-  
-                const valueEl =  
-                    document.getElementById(  
-                        `traitVal_${index}`  
-                    );  
-  
-  
-                const barEl =  
-                    document.getElementById(  
-                        `traitBar_${index}`  
-                    );  
-  
-  
-                if(valueEl){  
-  
-                    valueEl.textContent =  
-                        currentVal + "%";  
-  
+                function determineCharacter(scores){  
+                    const characters = [  
+                        { id:"witness", th:"ผู้เฝ้ามองอดีต", en:"THE WITNESS", img:"witness.png" },  
+                        { id:"seeker", th:"นักแสวงหาร่องรอย", en:"THE SEEKER", img:"seeker.png" },  
+                        { id:"empath", th:"ผู้ร่วมรำลึก", en:"THE EMPATH", img:"Empath.png" },  
+                        { id:"adventurer", th:"นักเดินทางผู้เปิดรับประสบการณ์", en:"THE ADVENTURER", img:"adventure .png" },  
+                        { id:"reflector", th:"ผู้ใคร่ครวญ", en:"THE REFLECTOR", img:"reflector.png" },  
+                        { id:"memory-keeper", th:"ผู้รักษาความทรงจำ", en:"THE MEMORY KEEPER", img:"memory.png" }  
+                    ];  
+                    const scoresWithId = [  
+                        ["witness", scores.history],  
+                        ["seeker", scores.curiosity],  
+                        ["empath", scores.empathy],  
+                        ["adventurer", scores.experience],  
+                        ["reflector", scores.reflection],  
+                        ["memory-keeper", scores.memory]  
+                    ];  
+                    scoresWithId.sort((a,b) => b[1] - a[1]);  
+                    const winnerId = scoresWithId[0][0];  
+                    return characters.find(char => char.id === winnerId) || characters[0];  
                 }  
   
+                const matchedChar = determineCharacter(finalScores);
+                if(resultBox){ resultBox.style.display = "block"; }  
   
-                if(barEl){  
+                const image = document.getElementById("revealCharacterImg");  
+                const th = document.getElementById("revealCharacterTh");  
+                const en = document.getElementById("revealCharacterEn");  
   
-                    barEl.style.width =  
-                        currentVal + "%";  
+                if(image){ image.src = matchedChar.img; }  
+                if(th){ th.textContent = matchedChar.th; }  
+                if(en){ en.textContent = matchedChar.en; }  
   
-                }  
+                showCharacterDescription(matchedChar, finalScores);  
   
-            });  
-  
-  
-            if(progress >= 100){  
-  
-                clearInterval(interval);  
-  
-  
-                setTimeout(function(){  
-  
-                    /*  
-                     * หยุดข้อความประมวลผล  
-                     */  
-  
-                    if(processingBox){  
-  
-                        processingBox.style.display =  
-                            "none";  
-  
-                    }  
-  
-  
- /* =================================  
-     จับคู่คาแรกเตอร์  
-    ================================= */  
-  
-function determineCharacter(scores){ 
- 
-    const characters = [ 
- 
-        { 
-            id:"witness", 
-            th:"ผู้เฝ้ามองอดีต", 
-            en:"THE WITNESS", 
-            img:"witness.png" 
-        }, 
- 
-        { 
-            id:"seeker", 
-            th:"นักแสวงหาร่องรอย", 
-            en:"THE SEEKER", 
-            img:"seeker.png" 
-        }, 
- 
-        { 
-            id:"empath", 
-            th:"ผู้ร่วมรำลึก", 
-            en:"THE EMPATH", 
-            img:"Empath.png" 
-        }, 
- 
-        { 
-            id:"adventurer", 
-            th:"นักเดินทางผู้เปิดรับประสบการณ์", 
-            en:"THE ADVENTURER", 
-            img:"adventure .png" 
-        }, 
- 
-        { 
-            id:"reflector", 
-            th:"ผู้ใคร่ครวญ", 
-            en:"THE REFLECTOR", 
-            img:"reflector.png" 
-        }, 
- 
-        { 
-            id:"memory-keeper", 
-            th:"ผู้รักษาความทรงจำ", 
-            en:"THE MEMORY KEEPER", 
-            img:"memory.png" 
-        } 
- 
-    ]; 
- 
-    const scoresWithId = [ 
-        ["witness", scores.history], 
-        ["seeker", scores.curiosity], 
-        ["empath", scores.empathy], 
-        ["adventurer", scores.experience], 
-        ["reflector", scores.reflection], 
-        ["memory-keeper", scores.memory] 
-    ]; 
- 
-    scoresWithId.sort((a,b) => b[1] - a[1]); 
- 
-    const winnerId = scoresWithId[0][0]; 
- 
-    return characters.find(char => char.id === winnerId) 
-        || characters[0]; 
+                if(thankyouBox){ thankyouBox.style.display = "block"; }  
+            },600);  
+        }  
+    },35);  
 }  
- /* ========================================================= 
-   CHARACTER DESCRIPTION 
-========================================================= */ 
- 
-function showCharacterDescription(character, scores){ 
- 
-    let description = ""; 
- 
- 
-    switch(character.id){ 
- 
-        case "witness": 
- 
-            description = 
-                "คุณเป็นผู้ที่ให้ความสำคัญกับเรื่องราวในอดีต " + 
-                "มองการเดินทางเป็นพื้นที่สำหรับเรียนรู้ ทำความเข้าใจ " + 
-                "และมองเห็นคุณค่าของเหตุการณ์ทางประวัติศาสตร์ผ่านสถานที่จริง"; 
- 
-            break; 
- 
- 
-        case "seeker": 
- 
-            description = 
-                "คุณเป็นผู้แสวงหาร่องรอยของเรื่องราวในอดีต " + 
-                "มีความอยากรู้อยากเห็นสูง และมักต้องการค้นคว้าข้อมูล " + 
-                "เพื่อทำความเข้าใจสถานที่และเหตุการณ์ให้ลึกซึ้งยิ่งขึ้น"; 
- 
-            break; 
- 
- 
-        case "empath": 
- 
-            description = 
-                "คุณเป็นผู้ที่รับรู้เรื่องราวผ่านความรู้สึก " + 
-                "ให้ความสำคัญกับผู้คน ความสูญเสีย และความทรงจำ " + 
-                "จึงมองการเดินทางในฐานะการทำความเข้าใจและร่วมรำลึก"; 
- 
-            break; 
- 
- 
-        case "adventurer": 
- 
-            description = 
-                "คุณเป็นผู้เปิดรับประสบการณ์และพร้อมออกเดินทาง " + 
-                "มีความสนใจที่จะสัมผัสสถานที่จริงด้วยตนเอง " + 
-                "และเรียนรู้เรื่องราวผ่านประสบการณ์ตรง"; 
- 
-            break; 
- 
- 
-        case "reflector": 
- 
-            description = 
-                "คุณเป็นผู้ใคร่ครวญและมองเหตุการณ์ในอดีตอย่างลึกซึ้ง " + 
-                "สนใจความหมายของความทรงจำและบทเรียนจากประวัติศาสตร์ " + 
-                "มากกว่าการเดินทางเพียงเพื่อการท่องเที่ยว"; 
- 
-            break; 
- 
- 
-        case "memory-keeper": 
- 
-            description = 
-                "คุณเป็นผู้ให้คุณค่ากับความทรงจำและการอนุรักษ์เรื่องราวในอดีต " + 
-                "เชื่อว่าสถานที่และเรื่องเล่าควรถูกจดจำอย่างเหมาะสม " + 
-                "และถ่ายทอดด้วยความเคารพต่อผู้ที่ได้รับผลกระทบ"; 
- 
-            break; 
- 
- 
-        default: 
- 
-            description = 
-                "คุณมีความสนใจหลากหลายด้านต่อเรื่องราวทางประวัติศาสตร์ " + 
-                "และการท่องเที่ยวเชิงมืด"; 
- 
-    } 
- 
- 
-    let existing = 
-        document.getElementById( 
-            "characterDescription" 
-        ); 
- 
- 
-    if(!existing){ 
- 
-        existing = 
-            document.createElement("div"); 
- 
-        existing.id = 
-            "characterDescription"; 
- 
-        existing.className = 
-            "character-description"; 
- 
- 
-        const resultBox = 
-            document.getElementById( 
-                "resultCharacterContainer" 
-            ); 
- 
- 
-        if(resultBox){ 
- 
-            resultBox.appendChild( 
-                existing 
-            ); 
- 
-        } 
- 
-    } 
- 
- 
-    existing.innerHTML = ` 
- 
-        <div class="character-description-title"> 
- 
-            ลักษณะการเดินทางของคุณ 
- 
-        </div> 
- 
-        <div class="character-description-text"> 
- 
-            ${description} 
- 
-        </div> 
- 
-    `; 
- 
-} 
-  const matchedChar = determineCharacter(finalScores);
-                    if(resultBox){  
-  
-                        resultBox.style.display =  
-                            "block";  
-  
-                    }  
-  
-  
-                    const image =  
-                        document.getElementById(  
-                            "revealCharacterImg"  
-                        );  
-  
-  
-                    const th =  
-                        document.getElementById(  
-                            "revealCharacterTh"  
-                        );  
-  
-  
-                    const en =  
-                        document.getElementById(  
-                            "revealCharacterEn"  
-                        );  
-  
-  
-                    if(image){  
-  
-                        image.src =  
-                            matchedChar.img;  
-  
-                    }  
-  
-  
-                    if(th){  
-  
-                        th.textContent =  
-                            matchedChar.th;  
-  
-                    }  
-  
-  
-                    if(en){  
-  
-                        en.textContent =  
-                            matchedChar.en;  
-  
-                    }  
-  
-  
-                    /* =================================  
-                       คำบรรยายบุคลิก  
-                    ================================= */  
-  
-                    showCharacterDescription(  
-                        matchedChar,  
-                        finalScores  
-                    );  
-  
-  
-                    /* =================================  
-                       ขอบคุณ  
-                    ================================= */  
-  
-                    if(thankyouBox){  
-  
-                        thankyouBox.style.display =  
-                            "block";  
-  
-                    }  
-  
-                },600);  
-  
-            }  
-  
-        },35);  
-  
-}  
-  
+
 document.getElementById("restartButton").addEventListener("click", ()=>{  
     playClick();  
     answers = {};  
     currentPage = 0;  
     location.reload();  
 });  
-  
-renderPage();  
-  
+
+// Set default initial language
+changeLanguage("TH");
+
 </script>  
-  
+
 </body>  
-</html> 
+</html>
